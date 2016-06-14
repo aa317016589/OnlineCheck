@@ -13,11 +13,14 @@ namespace OnlineCheck
 
         public Queue<Question> Questions { get; set; }
 
+        //这里生成一个Check
 
     }
 
     public class Question
     {
+        public String Id { get; private set; }
+
         public Int32 QuestionId { get; set; }
 
         public Int32 StudentSubjectId { get; set; }
@@ -28,9 +31,14 @@ namespace OnlineCheck
 
         public Int32 FinalScore { get; set; }
 
-        public Int32 IsFinish { get; set; }
+        public Boolean IsFinish { get; set; }
 
         private List<TeacherCheck> _teacherChecks;
+
+        public Question()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
 
         public void AddTeacherChecks(TeacherCheck teacherCheck)
         {
@@ -89,6 +97,19 @@ namespace OnlineCheck
 
     public abstract class Checkx
     {
-        
+        private List<TeacherCheck> _teacherChecks;
+
+        public Checkx(Int32 capacity)
+        {
+            _teacherChecks = new List<TeacherCheck>(capacity);
+        }
+
+        public abstract void AddTeacherChecks();
+
+        public abstract void Statistics();
+
+
+
+        //实现4种阅卷模式 将这种类对象包含到Question类中负责维护老师的打分和最终分数的计算
     }
 }
