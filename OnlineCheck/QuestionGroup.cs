@@ -19,14 +19,14 @@ namespace OnlineCheck
 
             JudgeMode = judgeMode;
 
-            teacherCheckManager = TeacherCheckManagerFactory.CreaTeacherCheckManager(JudgeMode);
+            TeacherCheckManager = TeacherCheckManagerFactory.CreaTeacherCheckManager(JudgeMode);
 
             Questions = new List<Question>();
         }
 
 
 
-        private TeacherCheckManager teacherCheckManager;
+        public TeacherCheckManager TeacherCheckManager { get; private set; }
 
 
 
@@ -43,14 +43,14 @@ namespace OnlineCheck
         public Int32 StudentSubjectId { get; private set; }
 
         public String PicUrl { get; private set; }
- 
+
         /// <summary>
         /// 阀值
         /// </summary>
         public Int32 Threshold { get; private set; }
 
         public TeacherCheckManager TeacherCheckManagerx { get; private set; }
- 
+
         public Question(Int32 questionId, Int32 studentSubjectId, TeacherCheckManager teacherCheckManagerx, Int32 threshold, String picUrl)
         {
             QuestionCheckId = Guid.NewGuid().ToString();
@@ -62,43 +62,14 @@ namespace OnlineCheck
             StudentSubjectId = studentSubjectId;
 
             PicUrl = picUrl;
+
+            PicUrl = QuestionCheckId;
+
+
+            TeacherCheckManagerx = teacherCheckManagerx;
+
+            TeacherCheckManagerx.Threshold = Threshold;
         }
-
-        //public void AddTeacherChecks(TeacherCheck teacherCheck)
-        //{
-        //    Int32 len = _teacherChecks.Count;
-
-        //    switch (JudgeMode)
-        //    {
-        //        case JudgeModes.SingleReview:
-        //            if (len > 0)
-        //            {
-        //                return;
-        //            }
-        //            break;
-        //        case JudgeModes.MultiReview:
-
-        //            if (len > 1)
-        //            {
-        //                return;
-        //            }
-
-        //            break;
-        //        case JudgeModes.ThirdReview:
-
-
-        //            break;
-        //        case JudgeModes.FourReview:
-        //            break;
-        //    }
-
-        //    _teacherChecks.Add(teacherCheck);
-        //}
-
-        //public Boolean HaveDoubt()
-        //{
-        //    return _teacherChecks.Any(s => s.IsDoubt);
-        //}
 
     }
 
@@ -110,14 +81,34 @@ namespace OnlineCheck
 
         public Boolean IsDoubt { get; set; }
 
-        public Int32 QuestionId { get; set; }
+        public String QuestionCheckId { get; set; }
 
         public Boolean IsOver { get; set; }
 
-        public CheckModes CheckMode { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("{0} 对 {1} 设 {2}", TeacherId.ToString(), QuestionCheckId, Score.ToString());
+        }
     }
 
+    public class PressCheck
+    {
+        public String Id { get; private set; }
 
+        public Double Score { get; set; }
+
+        public String QuestionCheckId { get; set; }
+
+        public Boolean IsOver { get; set; }
+
+        public PressCheck()
+        {
+            Id = Guid.NewGuid().ToString();
+
+            IsOver = false;
+        }
+    }
 
 
     //public abstract class Checkx

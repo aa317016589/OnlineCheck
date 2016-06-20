@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace OnlineCheck
 {
-    public abstract class TeacherCheckManager : ICloneable 
+    public abstract class TeacherCheckManager : ICloneable
     {
         protected List<TeacherCheck> TeacherChecks;
 
@@ -14,7 +14,7 @@ namespace OnlineCheck
 
         public Double FinalScore { get; protected set; }
 
-        public Boolean IsFinish { get; protected set; }
+        protected Boolean IsAllFinish { get; set; }
 
         public TeacherCheckManager(JudgeModes judgeMode)
         {
@@ -22,7 +22,7 @@ namespace OnlineCheck
 
             Capacity = (Int32)judgeMode;
 
-            IsFinish = false;
+            IsAllFinish = false;
 
             FinalScore = 0;
 
@@ -44,16 +44,45 @@ namespace OnlineCheck
             }
         }
 
+        public void UpdateTeacherChecks(TeacherCheck readyTeacherCheck)
+        {
+            TeacherCheck teacherCheck =
+                TeacherChecks.SingleOrDefault(s => s.TeacherId == readyTeacherCheck.TeacherId);
+
+            teacherCheck.IsOver = true;
+
+            teacherCheck.IsDoubt = readyTeacherCheck.IsDoubt;
+
+            teacherCheck.Score = readyTeacherCheck.Score;
+        }
+
+
         protected abstract void Statistics();
 
         public object Clone()
         {
-            return this.Clone(); 
+            return this.Clone();
         }
 
         public Boolean HaveDoubt()
         {
             return TeacherChecks.Any(s => s.IsDoubt);
+        }
+
+        public Boolean IsFinish(Int32 teacherId)
+        {
+
+            if (IsAllFinish)
+            {
+                return true;
+            }
+
+            return TeacherChecks.Any(s =>  s.TeacherId == teacherId && s.IsOver);
+        }
+
+        public Boolean IsFinish()
+        {
+            return IsAllFinish;
         }
     }
 
@@ -71,7 +100,7 @@ namespace OnlineCheck
         {
             FinalScore = TeacherChecks.SingleOrDefault().Score;
 
-            IsFinish = true;
+            IsAllFinish = true;
         }
     }
 
@@ -87,7 +116,7 @@ namespace OnlineCheck
         {
             FinalScore = TeacherChecks.Average(s => s.Score);
 
-            IsFinish = true;
+            IsAllFinish = true;
         }
 
 
@@ -95,15 +124,15 @@ namespace OnlineCheck
 
     public class TeacherCheckManagerThird : TeacherCheckManager
     {
-        public TeacherCheckManagerThird() 
+        public TeacherCheckManagerThird()
             : base(JudgeModes.ThirdReview)
         {
-            
+
         }
 
         protected override void Statistics()
         {
-            IsFinish = true;
+            IsAllFinish = true;
 
             Double average = TeacherChecks.Take(2).Average(s => s.Score);
 
