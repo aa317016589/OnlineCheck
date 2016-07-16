@@ -38,10 +38,6 @@ namespace OnlineCheck
 
             TeacherChecks.Add(teacherCheck);
 
-            if (TeacherChecks.Capacity == TeacherChecks.Count)
-            {
-                Statistics();
-            }
         }
 
         public void UpdateTeacherChecks(TeacherCheck readyTeacherCheck)
@@ -54,6 +50,12 @@ namespace OnlineCheck
             teacherCheck.IsDoubt = readyTeacherCheck.IsDoubt;
 
             teacherCheck.Score = readyTeacherCheck.Score;
+
+
+            if (TeacherChecks.Capacity == TeacherChecks.Count)
+            {
+                Statistics();
+            }
         }
 
 
@@ -199,7 +201,6 @@ namespace OnlineCheck
             return (scores[j + 1] + scores[j]) / 2;
         }
     }
-
 
     public class TeacherCheckManagerFourth : TeacherCheckManager
     {

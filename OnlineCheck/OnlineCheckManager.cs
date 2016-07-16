@@ -7,8 +7,8 @@ namespace OnlineCheck
 {
     public class OnlineCheckManager
     {
-        //加个单一实例
 
+        #region 单一实例
         private static OnlineCheckManager _singleton;
 
         private OnlineCheckManager()
@@ -25,7 +25,8 @@ namespace OnlineCheck
                 }
                 return _singleton;
             }
-        }
+        } 
+        #endregion
 
 
         public Dictionary<Int32, Queue<PressCheck>> PressReview; // 回评
@@ -75,7 +76,6 @@ namespace OnlineCheck
                     if (!dpressCheck.IsOver)
                     {
                         break;
-                        ;
                     }
                 }
             }

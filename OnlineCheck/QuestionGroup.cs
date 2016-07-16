@@ -19,14 +19,8 @@ namespace OnlineCheck
 
             JudgeMode = judgeMode;
 
-            TeacherCheckManager = TeacherCheckManagerFactory.CreaTeacherCheckManager(JudgeMode);
-
             Questions = new List<Question>();
         }
-
-
-
-        public TeacherCheckManager TeacherCheckManager { get; private set; }
 
 
 
@@ -51,7 +45,7 @@ namespace OnlineCheck
 
         public TeacherCheckManager TeacherCheckManagerx { get; private set; }
 
-        public Question(Int32 questionId, Int32 studentSubjectId, TeacherCheckManager teacherCheckManagerx, Int32 threshold, String picUrl)
+        public Question(Int32 questionId, Int32 studentSubjectId, Int32 threshold, String picUrl, JudgeModes judgeMode)
         {
             QuestionCheckId = Guid.NewGuid().ToString();
 
@@ -66,7 +60,7 @@ namespace OnlineCheck
             PicUrl = QuestionCheckId;
 
 
-            TeacherCheckManagerx = teacherCheckManagerx;
+            TeacherCheckManagerx = TeacherCheckManagerFactory.CreaTeacherCheckManager(judgeMode);
 
             TeacherCheckManagerx.Threshold = Threshold;
         }

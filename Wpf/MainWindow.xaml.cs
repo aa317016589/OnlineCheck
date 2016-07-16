@@ -30,7 +30,7 @@ namespace Wpf
 
         private Int32 TeacherId
         {
-            get { return (Int32)TeacherList.SelectedValue; }
+            get { return (Int32) TeacherList.SelectedValue; }
         }
 
 
@@ -87,7 +87,7 @@ namespace Wpf
 
             QuestionGroup questionGroup =
                 OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
-                    s => s.QuestionGroupId.ToString() == QuestionGroupList.SelectedValue.ToString());
+                    s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
             questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == questionCheckId)
                 .TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
@@ -99,9 +99,9 @@ namespace Wpf
 
         private void Init()
         {
-            IList<Int32> teachers = new List<int>() { 1, 2 };
+            IList<Int32> teachers = new List<int>() {1, 2};
 
-            IList<Int32> questionGroupIds = new List<int>() { 3, 4 };
+            IList<Int32> questionGroupIds = new List<int>() {3, 4};
 
 
 
@@ -116,14 +116,12 @@ namespace Wpf
                 QuestionGroup questionGroup = new QuestionGroup(questionGroupId, JudgeModes.SingleReview);
 
 
-                questionGroup.Questions.Add(new Question(1, 1, questionGroup.TeacherCheckManager, 0, ""));
+                questionGroup.Questions.Add(new Question(1, 1, 0, "", JudgeModes.SingleReview));
 
-                questionGroup.Questions.Add(new Question(1, 1, questionGroup.TeacherCheckManager, 0, ""));
+                questionGroup.Questions.Add(new Question(1, 2, 0, "", JudgeModes.SingleReview));
 
 
                 questionGroups.Add(questionGroup);
-
-
 
             }
 
@@ -152,12 +150,10 @@ namespace Wpf
         {
             QuestionGroup questionGroup =
                 OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
-                    s => s.QuestionGroupId.ToString() == QuestionGroupList.SelectedValue.ToString());
+                    s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
 
-            Int32 teacherId = (Int32)TeacherList.SelectedValue;
-
-            Question question = questionGroup.Questions.FirstOrDefault(s => !s.TeacherCheckManagerx.IsFinish(teacherId));
+            Question question = questionGroup.Questions.FirstOrDefault(s => !s.TeacherCheckManagerx.IsFinish(TeacherId));
 
             if (question == null)
             {
@@ -168,9 +164,9 @@ namespace Wpf
 
             QuestionCheckIdLabel.Content = question.QuestionCheckId;
 
-            questionGroup.TeacherCheckManager.AddTeacherChecks(new TeacherCheck()
+            question.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
             {
-                TeacherId = teacherId,
+                TeacherId = TeacherId,
                 QuestionCheckId = question.QuestionCheckId,
                 IsOver = false
             });
@@ -192,7 +188,7 @@ namespace Wpf
 
             foreach (var pressCheck in queuesPressChecks)
             {
-                PressCheckList.Items.Add(pressCheck.Id);
+                PressCheckList.Items.Add(pressCheck.QuestionCheckId);
             }
         }
 
@@ -204,13 +200,13 @@ namespace Wpf
         /// <param name="e"></param>
         private void QuestionGroupList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Int32 teacherId = (Int32)TeacherList.SelectedValue;
-
-
-            OnlineCheckManager.Instance.PressReview[teacherId].Clear();
+            OnlineCheckManager.Instance.PressReview[TeacherId].Clear();
 
 
             PressCheckList.Items.Clear();
+
+ 
+
         }
 
         /// <summary>
@@ -224,7 +220,7 @@ namespace Wpf
             String id = PressCheckList.SelectedValue.ToString();
 
 
-            PressCheck pressCheck = OnlineCheckManager.Instance.PressReview[TeacherId].SingleOrDefault(s => s.Id == id);
+            PressCheck pressCheck = OnlineCheckManager.Instance.PressReview[TeacherId].SingleOrDefault(s => s.QuestionCheckId == id);
 
 
 
@@ -259,7 +255,15 @@ namespace Wpf
 
         private void StatisticsBtn_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var questionGroup in OnlineCheckManager.Instance.QuestionGroups)
+            {
+                var v2 = questionGroup.Questions.ToDictionary(k => k.QuestionCheckId, v => v.TeacherCheckManagerx.FinalScore);
 
+                foreach (var d in v2)
+                {
+                    S1.Items.Add(String.Format("{0} {1}", d.Key, d.Value));
+                }
+            }
         }
     }
 }
