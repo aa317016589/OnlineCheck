@@ -4,42 +4,84 @@ using System.Linq;
 
 namespace OnlineCheck
 {
-    public abstract class TeacherCheckManager : ICloneable
+    public abstract class TeacherCheckManager
     {
         protected List<TeacherCheck> TeacherChecks;
 
-        protected Int32 Capacity;
-
-        public Int32 Threshold;
+        protected Double Threshold;
 
         public Double FinalScore { get; protected set; }
 
         protected Boolean IsAllFinish { get; set; }
 
-        public TeacherCheckManager(JudgeModes judgeMode)
+        public Boolean HaveDoubt()
+        {
+            return TeacherChecks.Any(s => s.IsDoubt);
+        }
+
+        public Boolean IsFinish(Int32 teacherId)
+        {
+            if (IsAllFinish)
+            {
+                return true;
+            }
+
+            return TeacherChecks.Any(s => s.TeacherId == teacherId && s.IsOver);
+        }
+
+        public Boolean IsFinish()
+        {
+            return IsAllFinish;
+        }
+
+        protected Boolean IsEnough
+        {
+            get
+            {
+                return TeacherChecks.Capacity == TeacherChecks.Count;
+            }
+        }
+
+        public TeacherCheckManager(JudgeModes judgeMode, Double threshold)
         {
             TeacherChecks = new List<TeacherCheck>((Int32)judgeMode);
-
-            Capacity = (Int32)judgeMode;
 
             IsAllFinish = false;
 
             FinalScore = 0;
 
-            Threshold = 0;
+            Threshold = threshold;
         }
 
+        public TeacherCheckManager(JudgeModes judgeMode)
+            : this(judgeMode, 0)
+        {
+
+        }
+
+        /// <summary>
+        /// 占位符，把题目分给老师
+        /// </summary>
+        /// <param name="teacherCheck"></param>
         public void AddTeacherChecks(TeacherCheck teacherCheck)
         {
-            if (TeacherChecks.Capacity == TeacherChecks.Count)
+            if (IsEnough || IsAllFinish)
+            {
+                return;
+            }
+
+            if (TeacherChecks.Any(s=>s.TeacherId == teacherCheck.TeacherId))
             {
                 return;
             }
 
             TeacherChecks.Add(teacherCheck);
-
         }
 
+        /// <summary>
+        /// 增加老师打分数据
+        /// </summary>
+        /// <param name="readyTeacherCheck"></param>
         public void UpdateTeacherChecks(TeacherCheck readyTeacherCheck)
         {
             TeacherCheck teacherCheck =
@@ -52,42 +94,30 @@ namespace OnlineCheck
             teacherCheck.Score = readyTeacherCheck.Score;
 
 
-            if (TeacherChecks.Capacity == TeacherChecks.Count)
+            if (ReadyCheck())
             {
                 Statistics();
             }
         }
 
-
+        /// <summary>
+        /// 计算分数
+        /// </summary>
         protected abstract void Statistics();
 
-        public object Clone()
+        /// <summary>
+        /// 检测是否满足最后计算
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean ReadyCheck()
         {
-            return this.Clone();
-        }
-
-        public Boolean HaveDoubt()
-        {
-            return TeacherChecks.Any(s => s.IsDoubt);
-        }
-
-        public Boolean IsFinish(Int32 teacherId)
-        {
-
-            if (IsAllFinish)
-            {
-                return true;
-            }
-
-            return TeacherChecks.Any(s =>  s.TeacherId == teacherId && s.IsOver);
-        }
-
-        public Boolean IsFinish()
-        {
-            return IsAllFinish;
+            return IsEnough;
         }
     }
 
+    /// <summary>
+    /// 1
+    /// </summary>
     public class TeacherCheckManagerFirst : TeacherCheckManager
     {
         public TeacherCheckManagerFirst()
@@ -106,6 +136,9 @@ namespace OnlineCheck
         }
     }
 
+    /// <summary>
+    /// 2
+    /// </summary>
     public class TeacherCheckManagerSecond : TeacherCheckManager
     {
         public TeacherCheckManagerSecond()
@@ -124,100 +157,96 @@ namespace OnlineCheck
 
     }
 
+    /// <summary>
+    /// 2+1
+    /// </summary>
     public class TeacherCheckManagerThird : TeacherCheckManager
     {
-        public TeacherCheckManagerThird()
-            : base(JudgeModes.ThirdReview)
+        public TeacherCheckManagerThird(Double threshold)
+            : base(JudgeModes.ThirdReview, threshold)
         {
 
+        }
+
+        protected override Boolean ReadyCheck()
+        {
+            if (base.ReadyCheck())
+            {
+                return true;
+            }
+
+            if (TeacherChecks.Count == 2)
+            {
+                return OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) < Threshold;
+            }
+
+            return false;
         }
 
         protected override void Statistics()
         {
             IsAllFinish = true;
 
-            Double average = TeacherChecks.Take(2).Average(s => s.Score);
-
-            if (average < Threshold)
-            {
-                FinalScore = average;
-            }
-
-            FinalScore = GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
+            FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
 
-        /// <summary>
-        /// 取N个分数中较接近的两个作为最终分数
-        /// </summary>
-        /// <param name="scores"></param>
-        /// <returns></returns>
-        private double GetMiddleScore(params Double[] scores)
-        {
-            Int32 length = scores.Length;
 
-            if (length == 0)
-            {
-                return 0;
-            }
-
-            if (length == 1)
-            {
-                return scores[0];
-            }
-
-            if (length == 2)
-            {
-                return (scores[0] + scores[1]) / 2;
-            }
-
-            scores = scores.OrderByDescending(s => s).ToArray();
-
-            Double difference = scores[0] - scores[1], nowDiff = 0;
-
-            int j = 0;
-
-            Boolean Ist = true; //等差数列
-
-            for (int i = 1; i < length - 1; i++)
-            {
-                nowDiff = Math.Abs(scores[i] - scores[i + 1]);
-
-                Ist = Ist && difference == nowDiff;
-
-                if (difference > nowDiff)
-                {
-                    difference = nowDiff;
-
-                    j = i;
-                }
-            }
-
-
-            if (Ist)
-            {
-                return scores.Average();
-            }
-
-            return (scores[j + 1] + scores[j]) / 2;
-        }
     }
 
+    /// <summary>
+    ///  2+1+1
+    /// </summary>
     public class TeacherCheckManagerFourth : TeacherCheckManager
     {
-        public TeacherCheckManagerFourth()
-            : base(JudgeModes.FourReview)
+        public TeacherCheckManagerFourth(Double threshold)
+            : base(JudgeModes.FourReview, threshold)
         {
 
         }
+
+        protected override Boolean ReadyCheck()
+        {
+            if (base.ReadyCheck())
+            {
+                return true;
+            }
+
+            if (TeacherChecks.Count > 1)
+            {
+                return OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) < Threshold;
+            }
+
+            return false;
+        }
+
         protected override void Statistics()
         {
-            throw new NotImplementedException();
+            IsAllFinish = true;
+
+            //Double average = TeacherChecks.Take(2).Average(s => s.Score);
+
+            //if (average < Threshold)
+            //{
+            //    FinalScore = average; return;
+            //}
+
+            //average = TeacherChecks.Take(3).Average(s => s.Score);
+
+            //if (average < Threshold)
+            //{
+            //    FinalScore = average; return;
+            //}
+
+            //FinalScore = TeacherChecks.Last().Score;
+
+
+            FinalScore = IsEnough ? TeacherChecks.Last().Score : OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
     }
 
     public static class TeacherCheckManagerFactory
     {
-        public static TeacherCheckManager CreaTeacherCheckManager(JudgeModes judgeMode)
+        public static TeacherCheckManager CreaTeacherCheckManager(JudgeModes judgeMode, Double Threshold)
         {
             TeacherCheckManager teacherCheckManager = null;
 
@@ -234,12 +263,12 @@ namespace OnlineCheck
 
                     break;
                 case JudgeModes.ThirdReview:
-                    teacherCheckManager = new TeacherCheckManagerThird();
+                    teacherCheckManager = new TeacherCheckManagerThird(Threshold);
 
                     break;
                 case JudgeModes.FourReview:
 
-                    teacherCheckManager = new TeacherCheckManagerFourth();
+                    teacherCheckManager = new TeacherCheckManagerFourth(Threshold);
 
                     break;
             }

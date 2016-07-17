@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="JudgeModes.cs" />
     <Compile Include="OnlineCheckManager.cs" />
+    <Compile Include="OnlineHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionGroup.cs" />
     <Compile Include="TeacherCheckManager.cs" />

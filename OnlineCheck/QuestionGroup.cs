@@ -59,12 +59,8 @@ namespace OnlineCheck
 
             PicUrl = QuestionCheckId;
 
-
-            TeacherCheckManagerx = TeacherCheckManagerFactory.CreaTeacherCheckManager(judgeMode);
-
-            TeacherCheckManagerx.Threshold = Threshold;
+            TeacherCheckManagerx = TeacherCheckManagerFactory.CreaTeacherCheckManager(judgeMode, Threshold);
         }
-
     }
 
     public class TeacherCheck

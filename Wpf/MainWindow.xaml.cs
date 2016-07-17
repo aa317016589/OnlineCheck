@@ -30,7 +30,7 @@ namespace Wpf
 
         private Int32 TeacherId
         {
-            get { return (Int32) TeacherList.SelectedValue; }
+            get { return (Int32)TeacherList.SelectedValue; }
         }
 
 
@@ -99,9 +99,9 @@ namespace Wpf
 
         private void Init()
         {
-            IList<Int32> teachers = new List<int>() {1, 2};
+            IList<Int32> teachers = new List<int>() { 1, 2, 3, 4 };
 
-            IList<Int32> questionGroupIds = new List<int>() {3, 4};
+            IList<Int32> questionGroupIds = new List<int>() { 3, 4 };
 
 
 
@@ -113,12 +113,12 @@ namespace Wpf
                 QuestionGroupList.Items.Add(questionGroupId);
 
 
-                QuestionGroup questionGroup = new QuestionGroup(questionGroupId, JudgeModes.SingleReview);
+                QuestionGroup questionGroup = new QuestionGroup(questionGroupId, JudgeModes.ThirdReview);
 
 
-                questionGroup.Questions.Add(new Question(1, 1, 0, "", JudgeModes.SingleReview));
+                questionGroup.Questions.Add(new Question(1, 1, 5, "", JudgeModes.ThirdReview));
 
-                questionGroup.Questions.Add(new Question(1, 2, 0, "", JudgeModes.SingleReview));
+                questionGroup.Questions.Add(new Question(1, 2, 4, "", JudgeModes.ThirdReview));
 
 
                 questionGroups.Add(questionGroup);
@@ -205,7 +205,7 @@ namespace Wpf
 
             PressCheckList.Items.Clear();
 
- 
+
 
         }
 
@@ -252,6 +252,9 @@ namespace Wpf
                 .TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
 
         }
+
+
+
 
         private void StatisticsBtn_Click(object sender, RoutedEventArgs e)
         {
