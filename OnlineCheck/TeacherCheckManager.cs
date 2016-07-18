@@ -8,56 +8,100 @@ namespace OnlineCheck
     {
         protected List<TeacherCheck> TeacherChecks;
 
+        /// <summary>
+        /// 阀值
+        /// </summary>
         protected Double Threshold;
 
+        /// <summary>
+        /// 最后得分
+        /// </summary>
         public Double FinalScore { get; protected set; }
 
+        /// <summary>
+        /// 是否完全结束
+        /// </summary>
         protected Boolean IsAllFinish { get; set; }
 
-        public Boolean HaveDoubt()
-        {
-            return TeacherChecks.Any(s => s.IsDoubt);
-        }
+        /// <summary>
+        /// 是否含有问题类
+        /// </summary>
+        /// <returns></returns>
+        public Boolean IsDoubt { get; protected set; }
 
-        public Boolean IsFinish(Int32 teacherId)
+
+        /// <summary>
+        /// 是否是仲裁类
+        /// </summary>
+        /// <returns></returns>
+        public Boolean IsArbitration { get; protected set; }
+
+
+        public Boolean IsX(Int32 teacherId)
         {
             if (IsAllFinish)
             {
-                return true;
+                return false;
             }
 
-            return TeacherChecks.Any(s => s.TeacherId == teacherId && s.IsOver);
-        }
-
-        public Boolean IsFinish()
-        {
-            return IsAllFinish;
-        }
-
-        protected Boolean IsEnough
-        {
-            get
+            if (!IsAllow)
             {
-                return TeacherChecks.Capacity == TeacherChecks.Count;
+                return false;
             }
+
+            if (TeacherChecks.Count >= IsEnough)
+            {
+                return false;
+            }
+
+
+            return !TeacherChecks.Any(s => s.TeacherId == teacherId && s.IsOver);
         }
 
-        public TeacherCheckManager(JudgeModes judgeMode, Double threshold)
+
+        /// <summary>
+        /// 是否已经填满整个打分集合
+        /// </summary>
+        protected Int32 IsEnough { get; set; }
+
+
+        /// <summary>
+        /// 是否允许获取
+        /// </summary>
+        protected Boolean IsAllow { get; set; }
+
+        /// <summary>
+        /// 已提交回评数
+        /// </summary>
+        protected Int32 ThirdCounter { get; set; }
+
+
+
+        protected TeacherCheckManager(JudgeModes judgeMode, Double threshold)
         {
             TeacherChecks = new List<TeacherCheck>((Int32)judgeMode);
 
             IsAllFinish = false;
 
+            IsArbitration = false;
+
             FinalScore = 0;
+
+            ThirdCounter = 0;
+
+            IsAllow = true;
 
             Threshold = threshold;
         }
 
-        public TeacherCheckManager(JudgeModes judgeMode)
+        protected TeacherCheckManager(JudgeModes judgeMode)
             : this(judgeMode, 0)
         {
 
         }
+
+
+
 
         /// <summary>
         /// 占位符，把题目分给老师
@@ -65,12 +109,12 @@ namespace OnlineCheck
         /// <param name="teacherCheck"></param>
         public void AddTeacherChecks(TeacherCheck teacherCheck)
         {
-            if (IsEnough || IsAllFinish)
+            if (TeacherChecks.Count >= IsEnough || IsAllFinish)
             {
                 return;
             }
 
-            if (TeacherChecks.Any(s=>s.TeacherId == teacherCheck.TeacherId))
+            if (TeacherChecks.Any(s => s.TeacherId == teacherCheck.TeacherId))
             {
                 return;
             }
@@ -93,25 +137,35 @@ namespace OnlineCheck
 
             teacherCheck.Score = readyTeacherCheck.Score;
 
-
-            if (ReadyCheck())
+            if (teacherCheck.IsDoubt)
             {
-                Statistics();
+                IsAllFinish = true;
+
+                IsDoubt = true;
             }
         }
 
+        public void SetFinalScoreForDoubt(Double score)
+        {
+            if (!IsDoubt)
+            {
+                return;
+            }
+
+            FinalScore = score;
+
+            IsDoubt = false;
+        }
+
         /// <summary>
-        /// 计算分数
+        /// 计算分数,回评被移除的时候执行的方法
         /// </summary>
         protected abstract void Statistics();
 
-        /// <summary>
-        /// 检测是否满足最后计算
-        /// </summary>
-        /// <returns></returns>
-        protected virtual Boolean ReadyCheck()
+        public void PressReturn()
         {
-            return IsEnough;
+            ThirdCounter = ThirdCounter + 1;
+            Statistics();
         }
     }
 
@@ -123,7 +177,7 @@ namespace OnlineCheck
         public TeacherCheckManagerFirst()
             : base(JudgeModes.SingleReview)
         {
-
+            IsEnough = 1;
         }
 
 
@@ -144,14 +198,17 @@ namespace OnlineCheck
         public TeacherCheckManagerSecond()
             : base(JudgeModes.MultiReview)
         {
-
+            IsEnough = 2;
         }
 
         protected override void Statistics()
         {
-            FinalScore = TeacherChecks.Average(s => s.Score);
+            if (ThirdCounter == TeacherChecks.Capacity)
+            {
+                FinalScore = TeacherChecks.Average(s => s.Score);
 
-            IsAllFinish = true;
+                IsAllFinish = true;
+            }
         }
 
 
@@ -165,31 +222,33 @@ namespace OnlineCheck
         public TeacherCheckManagerThird(Double threshold)
             : base(JudgeModes.ThirdReview, threshold)
         {
-
-        }
-
-        protected override Boolean ReadyCheck()
-        {
-            if (base.ReadyCheck())
-            {
-                return true;
-            }
-
-            if (TeacherChecks.Count == 2)
-            {
-                return OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) < Threshold;
-            }
-
-            return false;
+            IsEnough = 2;
         }
 
         protected override void Statistics()
         {
+            if (ThirdCounter < 2)
+            {
+                return;
+            }
+
+            if (ThirdCounter == 2)
+            {
+                IsAllow = OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+
+                if (IsAllow)
+                {
+                    IsEnough = IsEnough + 1;
+
+                    return;
+                }
+            }
+
+
             IsAllFinish = true;
 
             FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
-
 
     }
 
@@ -201,48 +260,44 @@ namespace OnlineCheck
         public TeacherCheckManagerFourth(Double threshold)
             : base(JudgeModes.FourReview, threshold)
         {
-
+            IsEnough = 2;
         }
 
-        protected override Boolean ReadyCheck()
-        {
-            if (base.ReadyCheck())
-            {
-                return true;
-            }
-
-            if (TeacherChecks.Count > 1)
-            {
-                return OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) < Threshold;
-            }
-
-            return false;
-        }
 
         protected override void Statistics()
         {
+            if (ThirdCounter < 2)
+            {
+                return;
+            }
+
+
+            IsAllow = OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+
+            if (IsAllow)
+            {
+                IsEnough = IsEnough + 1;
+
+                if (ThirdCounter == 3)
+                {
+                    IsArbitration = true;
+
+                    IsAllow = false;
+                }
+
+                return;
+            }
+
+
             IsAllFinish = true;
 
-            //Double average = TeacherChecks.Take(2).Average(s => s.Score);
-
-            //if (average < Threshold)
-            //{
-            //    FinalScore = average; return;
-            //}
-
-            //average = TeacherChecks.Take(3).Average(s => s.Score);
-
-            //if (average < Threshold)
-            //{
-            //    FinalScore = average; return;
-            //}
-
-            //FinalScore = TeacherChecks.Last().Score;
-
-
-            FinalScore = IsEnough ? TeacherChecks.Last().Score : OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
+            FinalScore = TeacherChecks.Capacity == TeacherChecks.Count
+                ? TeacherChecks.Last().Score
+                : OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
     }
+
+
 
     public static class TeacherCheckManagerFactory
     {

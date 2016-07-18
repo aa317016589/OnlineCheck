@@ -25,7 +25,7 @@ namespace OnlineCheck
                 }
                 return _singleton;
             }
-        } 
+        }
         #endregion
 
 
@@ -59,7 +59,7 @@ namespace OnlineCheck
 
             if (pc != null)
             {
-                pc.IsOver = true;
+                pc.IsPressed = true;
 
                 pc.Score = pressCheck.Score;
 
@@ -73,7 +73,7 @@ namespace OnlineCheck
                 {
                     PressCheck dpressCheck = queue.Dequeue();
 
-                    if (!dpressCheck.IsOver)
+                    if (!dpressCheck.IsPressed)
                     {
                         break;
                     }
@@ -81,6 +81,33 @@ namespace OnlineCheck
             }
 
             queue.Enqueue(pressCheck);
+        }
+
+        public void Press(Int32 teacherId, String questionCheckId, Double socre)
+        {
+            PressCheck pressCheck = PressReview[teacherId].SingleOrDefault(s => s.QuestionCheckId == questionCheckId);
+
+            if (pressCheck == null)
+            {
+                return;
+            }
+            pressCheck.IsPressed = true;
+
+            pressCheck.Score = socre;
+
+        }
+
+        public void Clear(Int32 teacherId, String questionGroupId)
+        {
+            Queue<PressCheck> queue = PressReview[teacherId];
+
+            while (queue.Any())
+            {
+                PressCheck pressCheck = queue.Dequeue();
+
+                QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == questionGroupId).Questions.SingleOrDefault(s => s.QuestionCheckId == pressCheck.QuestionCheckId).TeacherCheckManagerx.PressReturn();
+            }
+
         }
     }
 }

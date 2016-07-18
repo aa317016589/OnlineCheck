@@ -7,13 +7,13 @@ namespace OnlineCheck
 {
     public class QuestionGroup
     {
-        public Int32 QuestionGroupId { get; set; }
+        public String QuestionGroupId { get; set; }
 
         public JudgeModes JudgeMode { get; set; }
 
         public List<Question> Questions { get; private set; }
 
-        public QuestionGroup(Int32 questionGroupId, JudgeModes judgeMode)
+        public QuestionGroup(String questionGroupId, JudgeModes judgeMode)
         {
             QuestionGroupId = questionGroupId;
 
@@ -73,6 +73,9 @@ namespace OnlineCheck
 
         public String QuestionCheckId { get; set; }
 
+        /// <summary>
+        /// 表示已经更新了老师打的分数
+        /// </summary>
         public Boolean IsOver { get; set; }
 
 
@@ -90,13 +93,16 @@ namespace OnlineCheck
 
         public String QuestionCheckId { get; set; }
 
-        public Boolean IsOver { get; set; }
+        /// <summary>
+        /// 表示已经被回评处理过，即手动选择回评列表进行操作的
+        /// </summary>
+        public Boolean IsPressed { get; set; }
 
         public PressCheck()
         {
             Id = Guid.NewGuid().ToString();
 
-            IsOver = false;
+            IsPressed = false;
         }
     }
 
