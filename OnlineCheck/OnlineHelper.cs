@@ -12,7 +12,7 @@ namespace OnlineCheck
         /// </summary>
         /// <param name="scores"></param>
         /// <returns></returns>
-        public static Double GetMaxThreshold(params Double[] scores)
+        public static Double GetMinThreshold(params Double[] scores)
         {
             Int32 length = scores.Length;
 
@@ -41,7 +41,7 @@ namespace OnlineCheck
             {
                 nowDiff = Math.Abs(scores[i] - scores[i + 1]);
 
-                if (difference < nowDiff)
+                if (difference > nowDiff)
                 {
                     difference = nowDiff;
                 }

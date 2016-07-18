@@ -91,6 +91,7 @@ namespace OnlineCheck
             {
                 return;
             }
+
             pressCheck.IsPressed = true;
 
             pressCheck.Score = socre;

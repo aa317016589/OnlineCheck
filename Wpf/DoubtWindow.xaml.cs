@@ -16,12 +16,11 @@ using OnlineCheck;
 namespace Wpf
 {
     /// <summary>
-    /// WindowX.xaml 的交互逻辑
+    /// DoubtWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowX : Window
+    public partial class DoubtWindow : Window
     {
-
-        public WindowX(String questionGroupId, Int32 teacherId)
+        public DoubtWindow(String questionGroupId, Int32 teacherId)
         {
             InitializeComponent();
 
@@ -40,7 +39,7 @@ namespace Wpf
         {
             get { return Double.Parse(ScoreText.Text); }
         }
-   
+
         /// <summary>
         /// 当前的题目
         /// </summary>
@@ -50,13 +49,14 @@ namespace Wpf
         }
 
 
+
+
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                CheckType = CheckTypes.Arbitration,
-                IsOver = true,
+                CheckType = CheckTypes.Doubt,
                 QuestionCheckId = QuestionCheckId,
                 Score = Score
             };
@@ -66,15 +66,14 @@ namespace Wpf
         OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
             Question question = questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == QuestionCheckId);
-            question.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck, CheckTypes.Arbitration);
+            question.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck, CheckTypes.Doubt);
             question.TeacherCheckManagerx.PressReturn();
         }
 
         private void Get_Click(object sender, RoutedEventArgs e)
         {
-
             Question question = OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
-                .Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsArbitration && !s.TeacherCheckManagerx.IsAllFinish);
+                .Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsDoubt && !s.TeacherCheckManagerx.IsAllFinish);
 
             if (question == null)
             {
@@ -87,7 +86,7 @@ namespace Wpf
                 TeacherId = TeacherId,
                 QuestionCheckId = question.QuestionCheckId,
                 IsOver = false,
-                CheckType = CheckTypes.Arbitration
+                CheckType = CheckTypes.Doubt
             });
 
 

@@ -17,7 +17,8 @@
         <ListBox x:Name="S1" HorizontalAlignment="Left" Height="100" Margin="33,332,0,0" VerticalAlignment="Top" Width="493"/>
         <Button x:Name="Enter" Content="E" HorizontalAlignment="Left" Margin="220,217,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.24,-0.526" Click="Enter_Click"/>
         <CheckBox x:Name="IsOver" Content="IsPress" HorizontalAlignment="Left" Margin="201,144,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.539,-1.667" IsEnabled="False"/>
-        <Button x:Name="Open" Content="Open" HorizontalAlignment="Left" Margin="649,384,0,0" VerticalAlignment="Top" Width="75" Click="Open_Click"/>
+        <Button x:Name="OpenArbitration" Content="OpenArbitration" HorizontalAlignment="Left" Margin="649,384,0,0" VerticalAlignment="Top" Width="75" Click="Open_Click"/>
+        <Button x:Name="OpenDoubt" Content="OpenDoubt" HorizontalAlignment="Left" Margin="771,384,0,0" VerticalAlignment="Top" Width="75" Click="OpenDoubt_Click"/>
 
     </Grid>
 </Window>

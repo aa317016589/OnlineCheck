@@ -69,7 +69,7 @@ namespace OnlineCheck
 
         public Double Score { get; set; }
 
-        public Boolean IsDoubt { get; set; }
+        public CheckTypes CheckType { get; set; }
 
         public String QuestionCheckId { get; set; }
 
@@ -78,6 +78,13 @@ namespace OnlineCheck
         /// </summary>
         public Boolean IsOver { get; set; }
 
+
+        public TeacherCheck()
+        {
+            IsOver = false;
+
+            CheckType = CheckTypes.Ordinary;
+        }
 
         public override string ToString()
         {

@@ -21,7 +21,7 @@ namespace OnlineCheck
         /// <summary>
         /// 是否完全结束
         /// </summary>
-        protected Boolean IsAllFinish { get; set; }
+        public Boolean IsAllFinish { get; set; }
 
         /// <summary>
         /// 是否含有问题类
@@ -114,7 +114,7 @@ namespace OnlineCheck
                 return;
             }
 
-            if (TeacherChecks.Any(s => s.TeacherId == teacherCheck.TeacherId))
+            if (TeacherChecks.Any(s => s.TeacherId == teacherCheck.TeacherId && teacherCheck.CheckType == CheckTypes.Ordinary))
             {
                 return;
             }
@@ -126,18 +126,18 @@ namespace OnlineCheck
         /// 增加老师打分数据
         /// </summary>
         /// <param name="readyTeacherCheck"></param>
-        public void UpdateTeacherChecks(TeacherCheck readyTeacherCheck)
+        public void UpdateTeacherChecks(TeacherCheck readyTeacherCheck, CheckTypes checkType = CheckTypes.Ordinary)
         {
             TeacherCheck teacherCheck =
-                TeacherChecks.SingleOrDefault(s => s.TeacherId == readyTeacherCheck.TeacherId);
+                TeacherChecks.SingleOrDefault(s => s.TeacherId == readyTeacherCheck.TeacherId && s.CheckType == checkType);
 
             teacherCheck.IsOver = true;
 
-            teacherCheck.IsDoubt = readyTeacherCheck.IsDoubt;
+            teacherCheck.CheckType = readyTeacherCheck.CheckType;
 
             teacherCheck.Score = readyTeacherCheck.Score;
 
-            if (teacherCheck.IsDoubt)
+            if (teacherCheck.CheckType == CheckTypes.Doubt)
             {
                 IsAllFinish = true;
 
@@ -145,14 +145,16 @@ namespace OnlineCheck
             }
         }
 
-        public void SetFinalScoreForDoubt(Double score)
+        public void SetFinalScoreForDoubt(TeacherCheck teacherCheck)
         {
             if (!IsDoubt)
             {
                 return;
             }
 
-            FinalScore = score;
+            FinalScore = teacherCheck.Score;
+
+            TeacherChecks.Add(teacherCheck);
 
             IsDoubt = false;
         }
@@ -234,7 +236,7 @@ namespace OnlineCheck
 
             if (ThirdCounter == 2)
             {
-                IsAllow = OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+                IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
 
                 if (IsAllow)
                 {
@@ -271,23 +273,24 @@ namespace OnlineCheck
                 return;
             }
 
-
-            IsAllow = OnlineHelper.GetMaxThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
-
-            if (IsAllow)
+            if (!IsArbitration)
             {
-                IsEnough = IsEnough + 1;
+                IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
 
-                if (ThirdCounter == 3)
+                if (IsAllow)
                 {
-                    IsArbitration = true;
+                    IsEnough = IsEnough + 1;
 
-                    IsAllow = false;
+                    if (ThirdCounter == 3)
+                    {
+                        IsArbitration = true;
+
+                        IsAllow = false;
+                    }
+
+                    return;
                 }
-
-                return;
             }
-
 
             IsAllFinish = true;
 

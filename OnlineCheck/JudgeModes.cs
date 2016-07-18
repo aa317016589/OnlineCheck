@@ -37,11 +37,13 @@ namespace OnlineCheck
         FourReview
     }
 
-    public enum CheckModes
+    public enum CheckTypes
     {
-        CheckFirst = 1,
-        CheckSecond,
-        CheckThird,
-        CheckArbitration
+        [Description("普通")]
+        Ordinary = 1,
+        [Description("问题")]
+        Doubt,
+        [Description("仲裁")]
+        Arbitration,
     }
 }

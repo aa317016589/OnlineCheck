@@ -75,8 +75,6 @@ namespace Wpf
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                IsDoubt = false,
-                IsOver = true,
                 QuestionCheckId = QuestionCheckId,
                 Score = Score
             };
@@ -96,8 +94,7 @@ namespace Wpf
                 OnlineCheckManager.Instance.Enqueue(teacherCheck.TeacherId, new PressCheck()
                 {
                     QuestionCheckId = teacherCheck.QuestionCheckId,
-                    Score = teacherCheck.Score,
-                    IsPressed = teacherCheck.IsOver
+                    Score = teacherCheck.Score
                 });
             }
             else
@@ -188,6 +185,7 @@ namespace Wpf
                 IsOver = false
             });
 
+            ScoreText.Text = "";
         }
 
 
@@ -262,7 +260,7 @@ namespace Wpf
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                IsDoubt = true,
+                CheckType = CheckTypes.Doubt,
                 IsOver = true,
                 QuestionCheckId = QuestionCheckId,
                 Score = 0
@@ -307,11 +305,20 @@ namespace Wpf
         private void Enter_Click(object sender, RoutedEventArgs e)
         {
             OnlineCheckManager.Instance.Clear(TeacherId, QuestionGroupId);
+            PressCheckList.Items.Clear();
         }
+
+
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            WindowX windowX = new WindowX();
+            WindowX windowX = new WindowX(QuestionGroupId, TeacherId);
+            windowX.Show();
+        }
+
+        private void OpenDoubt_Click(object sender, RoutedEventArgs e)
+        {
+            WindowX windowX = new WindowX(QuestionGroupId, TeacherId);
             windowX.Show();
         }
     }
