@@ -181,8 +181,7 @@ namespace Wpf
             question.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                QuestionCheckId = question.QuestionCheckId,
-                IsOver = false
+                QuestionCheckId = question.QuestionCheckId
             });
 
             ScoreText.Text = "";
@@ -261,7 +260,6 @@ namespace Wpf
             {
                 TeacherId = TeacherId,
                 CheckType = CheckTypes.Doubt,
-                IsOver = true,
                 QuestionCheckId = QuestionCheckId,
                 Score = 0
             };
@@ -318,8 +316,8 @@ namespace Wpf
 
         private void OpenDoubt_Click(object sender, RoutedEventArgs e)
         {
-            WindowX windowX = new WindowX(QuestionGroupId, TeacherId);
-            windowX.Show();
+            DoubtWindow doubtWindow = new DoubtWindow(QuestionGroupId, TeacherId);
+            doubtWindow.Show();
         }
     }
 }

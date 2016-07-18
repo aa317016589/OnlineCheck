@@ -49,7 +49,7 @@ namespace OnlineCheck
                 return false;
             }
 
-            if (TeacherChecks.Count >= IsEnough)
+            if (TeacherChecks.Count >= EnoughCount)
             {
                 return false;
             }
@@ -60,9 +60,9 @@ namespace OnlineCheck
 
 
         /// <summary>
-        /// 是否已经填满整个打分集合
+        /// 打分集合上限数
         /// </summary>
-        protected Int32 IsEnough { get; set; }
+        protected Int32 EnoughCount { get; set; }
 
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace OnlineCheck
         /// <param name="teacherCheck"></param>
         public void AddTeacherChecks(TeacherCheck teacherCheck)
         {
-            if (TeacherChecks.Count >= IsEnough || IsAllFinish)
+            if (TeacherChecks.Count >= EnoughCount || IsAllFinish)
             {
                 return;
             }
@@ -179,7 +179,7 @@ namespace OnlineCheck
         public TeacherCheckManagerFirst()
             : base(JudgeModes.SingleReview)
         {
-            IsEnough = 1;
+            EnoughCount = 1;
         }
 
 
@@ -200,7 +200,7 @@ namespace OnlineCheck
         public TeacherCheckManagerSecond()
             : base(JudgeModes.MultiReview)
         {
-            IsEnough = 2;
+            EnoughCount = 2;
         }
 
         protected override void Statistics()
@@ -224,7 +224,7 @@ namespace OnlineCheck
         public TeacherCheckManagerThird(Double threshold)
             : base(JudgeModes.ThirdReview, threshold)
         {
-            IsEnough = 2;
+            EnoughCount = 2;
         }
 
         protected override void Statistics()
@@ -240,7 +240,7 @@ namespace OnlineCheck
 
                 if (IsAllow)
                 {
-                    IsEnough = IsEnough + 1;
+                    EnoughCount = EnoughCount + 1;
 
                     return;
                 }
@@ -262,7 +262,7 @@ namespace OnlineCheck
         public TeacherCheckManagerFourth(Double threshold)
             : base(JudgeModes.FourReview, threshold)
         {
-            IsEnough = 2;
+            EnoughCount = 2;
         }
 
 
@@ -279,7 +279,7 @@ namespace OnlineCheck
 
                 if (IsAllow)
                 {
-                    IsEnough = IsEnough + 1;
+                    EnoughCount = EnoughCount + 1;
 
                     if (ThirdCounter == 3)
                     {
