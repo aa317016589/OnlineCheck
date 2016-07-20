@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace OnlineCheck
 {
@@ -22,10 +21,20 @@ namespace OnlineCheck
             Questions = new List<Question>();
         }
 
+        public Question SelectQuestion(Int32 teacherId)
+        {
+            return Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsX(teacherId));
+        }
 
+        public Question SeleteDoubtQuestion()
+        {
+            return Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsDoubt && !s.TeacherCheckManagerx.IsAllFinish);
+        }
 
-
-
+        public Question SeleteArbitrationQuestion()
+        {
+            return Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsArbitration && !s.TeacherCheckManagerx.IsAllFinish);
+        }
     }
 
     public class Question
@@ -92,6 +101,10 @@ namespace OnlineCheck
         }
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class PressCheck
     {
         public String Id { get; private set; }

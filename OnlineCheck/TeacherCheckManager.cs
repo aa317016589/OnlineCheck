@@ -109,7 +109,7 @@ namespace OnlineCheck
         /// <param name="teacherCheck"></param>
         public void AddTeacherChecks(TeacherCheck teacherCheck)
         {
-            if (TeacherChecks.Count >= EnoughCount || IsAllFinish)
+            if (TeacherChecks.Count >= EnoughCount || IsAllFinish || IsDoubt)
             {
                 return;
             }
@@ -126,6 +126,7 @@ namespace OnlineCheck
         /// 增加老师打分数据
         /// </summary>
         /// <param name="readyTeacherCheck"></param>
+        /// <param name="checkType"></param>
         public void UpdateTeacherChecks(TeacherCheck readyTeacherCheck, CheckTypes checkType = CheckTypes.Ordinary)
         {
             TeacherCheck teacherCheck =
@@ -139,15 +140,15 @@ namespace OnlineCheck
 
             if (teacherCheck.CheckType == CheckTypes.Doubt)
             {
-                IsAllFinish = true;
-
                 IsDoubt = true;
+
+                IsAllow = false;
             }
         }
 
         public void SetFinalScoreForDoubt(TeacherCheck teacherCheck)
         {
-            if (!IsDoubt)
+            if (!IsDoubt && IsAllFinish)
             {
                 return;
             }
@@ -156,7 +157,7 @@ namespace OnlineCheck
 
             TeacherChecks.Add(teacherCheck);
 
-            IsDoubt = false;
+            IsAllFinish = true;
         }
 
         /// <summary>

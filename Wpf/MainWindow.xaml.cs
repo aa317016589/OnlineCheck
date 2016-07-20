@@ -167,7 +167,7 @@ namespace Wpf
                     s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
 
-            Question question = questionGroup.Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsX(TeacherId));
+            Question question = questionGroup.SelectQuestion(TeacherId);
 
             if (question == null)
             {

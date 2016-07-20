@@ -67,13 +67,16 @@ namespace Wpf
 
             Question question = questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == QuestionCheckId);
             question.TeacherCheckManagerx.SetFinalScoreForDoubt(teacherCheck);
-            question.TeacherCheckManagerx.PressReturn();
         }
+
+
+
 
         private void Get_Click(object sender, RoutedEventArgs e)
         {
-            Question question = OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
-                .Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsDoubt);
+            Question question =
+                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
+                    .SeleteDoubtQuestion();
 
             if (question == null)
             {
@@ -85,7 +88,6 @@ namespace Wpf
             {
                 TeacherId = TeacherId,
                 QuestionCheckId = question.QuestionCheckId,
-                IsOver = false,
                 CheckType = CheckTypes.Doubt
             });
 

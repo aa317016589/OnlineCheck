@@ -73,8 +73,9 @@ namespace Wpf
         private void Get_Click(object sender, RoutedEventArgs e)
         {
 
-            Question question = OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
-                .Questions.FirstOrDefault(s => s.TeacherCheckManagerx.IsArbitration && !s.TeacherCheckManagerx.IsAllFinish);
+            Question question =
+                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
+                    .SeleteArbitrationQuestion();
 
             if (question == null)
             {
