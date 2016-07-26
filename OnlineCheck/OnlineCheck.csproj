@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnswerCheck.cs" />
     <Compile Include="JudgeModes.cs" />
     <Compile Include="OnlineCheckManager.cs" />
     <Compile Include="OnlineHelper.cs" />

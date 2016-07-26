@@ -13,6 +13,9 @@ namespace OnlineCheck
 
         private OnlineCheckManager()
         {
+            QuestionGroups = new List<QuestionGroup>();
+
+            AnswerSheets = new List<AnswerSheet>();
         }
 
         public static OnlineCheckManager Instance
@@ -29,10 +32,11 @@ namespace OnlineCheck
         #endregion
 
 
-        public IEnumerable<QuestionGroup> QuestionGroups;
+        public List<QuestionGroup> QuestionGroups;
 
+        public List<AnswerSheet> AnswerSheets;
 
-        public void Init(IEnumerable<QuestionGroup> questionGroups, IEnumerable<Int32> teacherIds)
+        public void Init(QuestionGroup questionGroup, IEnumerable<Int32> teacherIds)
         {
             PressReview = new Dictionary<int, Queue<PressCheck>>();
 
@@ -41,10 +45,9 @@ namespace OnlineCheck
                 PressReview.Add(id, new Queue<PressCheck>());
             }
 
-            QuestionGroups = questionGroups;
+            QuestionGroups.Add(questionGroup);
         }
 
-      
 
         #region 回评
 
@@ -88,7 +91,7 @@ namespace OnlineCheck
             }
 
             queue.Enqueue(pressCheck);
-        } 
+        }
         #endregion
 
         #region 手动回评
@@ -96,11 +99,11 @@ namespace OnlineCheck
         /// 手动回评
         /// </summary>
         /// <param name="teacherId"></param>
-        /// <param name="questionCheckId"></param>
+        /// <param name="answerCheckId"></param>
         /// <param name="socre"></param>
-        public void Press(Int32 teacherId, String questionCheckId, Double socre)
+        public void Press(Int32 teacherId, String answerCheckId, Dictionary<String, Double> socre)
         {
-            PressCheck pressCheck = PressReview[teacherId].SingleOrDefault(s => s.QuestionCheckId == questionCheckId);
+            PressCheck pressCheck = PressReview[teacherId].SingleOrDefault(s => s.AnswerCheckId == answerCheckId);
 
             if (pressCheck == null)
             {
@@ -111,7 +114,7 @@ namespace OnlineCheck
 
             pressCheck.Score = socre;
 
-        } 
+        }
         #endregion
 
         #region 清理回评
@@ -119,8 +122,7 @@ namespace OnlineCheck
         /// 清理回评
         /// </summary>
         /// <param name="teacherId"></param>
-        /// <param name="questionGroupId"></param>
-        public void Clear(Int32 teacherId, String questionGroupId)
+        public void Clear(Int32 teacherId)
         {
             Queue<PressCheck> queue = PressReview[teacherId];
 
@@ -128,10 +130,15 @@ namespace OnlineCheck
             {
                 PressCheck pressCheck = queue.Dequeue();
 
-                QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == questionGroupId).Questions.SingleOrDefault(s => s.QuestionCheckId == pressCheck.QuestionCheckId).TeacherCheckManagerx.PressReturn();
+                AnswerCheck answerCheck = AnswerSheets.SelectMany(s => s.AnswerChecks)
+                       .SingleOrDefault(s => s.AnswerCheckId == pressCheck.AnswerCheckId);
+
+                answerCheck.TeacherCheckManagerx.PressReturn();
+
+               
             }
 
-        }  
+        }
         #endregion
 
         #endregion

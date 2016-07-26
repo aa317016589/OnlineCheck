@@ -8,15 +8,12 @@ namespace OnlineCheck
     {
         protected List<TeacherCheck> TeacherChecks;
 
+        protected List<Answer> ReadyCheckAnswers { get; set; }
+
         /// <summary>
         /// 阀值
         /// </summary>
         protected Double Threshold;
-
-        /// <summary>
-        /// 最后得分
-        /// </summary>
-        public Double FinalScore { get; protected set; }
 
         /// <summary>
         /// 是否完全结束
@@ -37,7 +34,12 @@ namespace OnlineCheck
         public Boolean IsArbitration { get; protected set; }
 
 
-        public Boolean IsX(Int32 teacherId)
+        /// <summary>
+        /// 普通获取
+        /// </summary>
+        /// <param name="teacherId"></param>
+        /// <returns></returns>
+        public Boolean IsGet(Int32 teacherId)
         {
             if (IsAllFinish)
             {
@@ -77,7 +79,7 @@ namespace OnlineCheck
 
 
 
-        protected TeacherCheckManager(JudgeModes judgeMode, Double threshold)
+        protected TeacherCheckManager(JudgeModes judgeMode, List<Answer> answers)
         {
             TeacherChecks = new List<TeacherCheck>((Int32)judgeMode);
 
@@ -85,19 +87,11 @@ namespace OnlineCheck
 
             IsArbitration = false;
 
-            FinalScore = 0;
-
             ThirdCounter = 0;
 
             IsAllow = true;
 
-            Threshold = threshold;
-        }
-
-        protected TeacherCheckManager(JudgeModes judgeMode)
-            : this(judgeMode, 0)
-        {
-
+            ReadyCheckAnswers = answers;
         }
 
 
@@ -146,6 +140,10 @@ namespace OnlineCheck
             }
         }
 
+        /// <summary>
+        /// 对问题卷进行处理
+        /// </summary>
+        /// <param name="teacherCheck"></param>
         public void SetFinalScoreForDoubt(TeacherCheck teacherCheck)
         {
             if (!IsDoubt && IsAllFinish)
@@ -153,7 +151,7 @@ namespace OnlineCheck
                 return;
             }
 
-            FinalScore = teacherCheck.Score;
+
 
             TeacherChecks.Add(teacherCheck);
 
@@ -165,6 +163,9 @@ namespace OnlineCheck
         /// </summary>
         protected abstract void Statistics();
 
+        /// <summary>
+        /// 执行回评之后的回调
+        /// </summary>
         public void PressReturn()
         {
             ThirdCounter = ThirdCounter + 1;
@@ -177,17 +178,18 @@ namespace OnlineCheck
     /// </summary>
     public class TeacherCheckManagerFirst : TeacherCheckManager
     {
-        public TeacherCheckManagerFirst()
-            : base(JudgeModes.SingleReview)
+        public TeacherCheckManagerFirst(List<Answer> answers)
+            : base(JudgeModes.SingleReview, answers)
         {
             EnoughCount = 1;
         }
 
-
-
         protected override void Statistics()
         {
-            FinalScore = TeacherChecks.SingleOrDefault().Score;
+            ReadyCheckAnswers.ForEach(s =>
+            {
+                s.FinalScore = TeacherChecks.SingleOrDefault().Score[s.AnswerId];
+            });
 
             IsAllFinish = true;
         }
@@ -198,20 +200,25 @@ namespace OnlineCheck
     /// </summary>
     public class TeacherCheckManagerSecond : TeacherCheckManager
     {
-        public TeacherCheckManagerSecond()
-            : base(JudgeModes.MultiReview)
+        public TeacherCheckManagerSecond(List<Answer> answers)
+            : base(JudgeModes.MultiReview, answers)
         {
             EnoughCount = 2;
         }
 
         protected override void Statistics()
         {
-            if (ThirdCounter == TeacherChecks.Capacity)
+            if (ThirdCounter != TeacherChecks.Capacity)
             {
-                FinalScore = TeacherChecks.Average(s => s.Score);
-
-                IsAllFinish = true;
+                return;
             }
+
+            ReadyCheckAnswers.ForEach(s =>
+            {
+                s.FinalScore = TeacherChecks.Average(a => a.Score[s.AnswerId]);
+            });
+
+            IsAllFinish = true;
         }
 
 
@@ -222,8 +229,8 @@ namespace OnlineCheck
     /// </summary>
     public class TeacherCheckManagerThird : TeacherCheckManager
     {
-        public TeacherCheckManagerThird(Double threshold)
-            : base(JudgeModes.ThirdReview, threshold)
+        public TeacherCheckManagerThird(List<Answer> answers)
+            : base(JudgeModes.ThirdReview, answers)
         {
             EnoughCount = 2;
         }
@@ -237,7 +244,14 @@ namespace OnlineCheck
 
             if (ThirdCounter == 2)
             {
-                IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+                foreach (var readyCheckAnswer in ReadyCheckAnswers)
+                {
+                    IsAllow = IsAllow && OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray()) >
+                     readyCheckAnswer.QuestionInfo.Threshold;                
+                }
+
+
+                //    IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
 
                 if (IsAllow)
                 {
@@ -250,7 +264,11 @@ namespace OnlineCheck
 
             IsAllFinish = true;
 
-            FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
+            ReadyCheckAnswers.ForEach(s =>
+            {
+                s.FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(a => a.Score[s.AnswerId]).ToArray());
+            });
+            //FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
 
     }
@@ -260,8 +278,8 @@ namespace OnlineCheck
     /// </summary>
     public class TeacherCheckManagerFourth : TeacherCheckManager
     {
-        public TeacherCheckManagerFourth(Double threshold)
-            : base(JudgeModes.FourReview, threshold)
+        public TeacherCheckManagerFourth(List<Answer> answers)
+            : base(JudgeModes.FourReview, answers)
         {
             EnoughCount = 2;
         }
@@ -276,7 +294,14 @@ namespace OnlineCheck
 
             if (!IsArbitration)
             {
-                IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+            //    IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+
+                foreach (var readyCheckAnswer in ReadyCheckAnswers)
+                {
+                    IsAllow = IsAllow && OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray()) >
+                     readyCheckAnswer.QuestionInfo.Threshold;
+                }
+
 
                 if (IsAllow)
                 {
@@ -295,9 +320,13 @@ namespace OnlineCheck
 
             IsAllFinish = true;
 
-            FinalScore = TeacherChecks.Capacity == TeacherChecks.Count
-                ? TeacherChecks.Last().Score
-                : OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
+            ReadyCheckAnswers.ForEach(s =>
+            {
+                s.FinalScore = TeacherChecks.Capacity == TeacherChecks.Count ? TeacherChecks.Last().Score[s.AnswerId] : OnlineHelper.GetMiddleScore(TeacherChecks.Select(a => a.Score[s.AnswerId]).ToArray());
+            });
+            //FinalScore = TeacherChecks.Capacity == TeacherChecks.Count
+            //    ? TeacherChecks.Last().Score
+            //    : OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
     }
 
@@ -305,7 +334,7 @@ namespace OnlineCheck
 
     public static class TeacherCheckManagerFactory
     {
-        public static TeacherCheckManager CreaTeacherCheckManager(JudgeModes judgeMode, Double Threshold)
+        public static TeacherCheckManager CreaTeacherCheckManager(JudgeModes judgeMode, List<Answer> answers)
         {
             TeacherCheckManager teacherCheckManager = null;
 
@@ -313,21 +342,21 @@ namespace OnlineCheck
             {
                 case JudgeModes.SingleReview:
 
-                    teacherCheckManager = new TeacherCheckManagerFirst();
+                    teacherCheckManager = new TeacherCheckManagerFirst(answers);
 
                     break;
                 case JudgeModes.MultiReview:
 
-                    teacherCheckManager = new TeacherCheckManagerSecond();
+                    teacherCheckManager = new TeacherCheckManagerSecond(answers);
 
                     break;
                 case JudgeModes.ThirdReview:
-                    teacherCheckManager = new TeacherCheckManagerThird(Threshold);
+                    teacherCheckManager = new TeacherCheckManagerThird(answers);
 
                     break;
                 case JudgeModes.FourReview:
 
-                    teacherCheckManager = new TeacherCheckManagerFourth(Threshold);
+                    teacherCheckManager = new TeacherCheckManagerFourth(answers);
 
                     break;
             }
