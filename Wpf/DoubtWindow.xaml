@@ -4,9 +4,13 @@
         Title="DoubtWindow" Height="300" Width="300">
     <Grid>
         <Label Content="问题卷" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Submit" Content="Submit" HorizontalAlignment="Left" Margin="30,130,0,0" VerticalAlignment="Top" Width="75" Click="Submit_Click"/>
-        <Label x:Name="QuestionCheckIdLabel" Content="" HorizontalAlignment="Left" Margin="30,40,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ScoreText" HorizontalAlignment="Left" Height="23" Margin="30,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="Get" Content="Get" HorizontalAlignment="Left" Margin="156,130,0,0" VerticalAlignment="Top" Width="75" Click="Get_Click"/>
+        <Button x:Name="Submit" Content="Submit" HorizontalAlignment="Left" Margin="33,210,0,0" VerticalAlignment="Top" Width="75" Click="Submit_Click"/>
+
+        <TextBox x:Name="FirstScoreText" HorizontalAlignment="Left" Height="23" Margin="33,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="FirstContentLabel" Content="FContent" HorizontalAlignment="Left" Margin="30,53,0,0" VerticalAlignment="Top" Width="248"/>
+        <Label x:Name="SecondContentLabel" Content="SContent" HorizontalAlignment="Left" Margin="34,124,0,0" VerticalAlignment="Top" Width="248"/>
+        <TextBox x:Name="SecondScoreText" HorizontalAlignment="Left" Height="23" Margin="34,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="Get" Content="Get" HorizontalAlignment="Left" Margin="146,210,0,0" VerticalAlignment="Top" Width="75" Click="Get_Click"/>
+        <Label x:Name="AnswerCheckLabel" HorizontalAlignment="Left" Margin="97,10,0,0" VerticalAlignment="Top" Content="" Width="181"/>
     </Grid>
 </Window>

@@ -52,48 +52,47 @@ namespace Wpf
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            TeacherCheck teacherCheck = new TeacherCheck()
-            {
-                TeacherId = TeacherId,
-                CheckType = CheckTypes.Arbitration,
-                IsOver = true,
-                QuestionCheckId = QuestionCheckId,
-                Score = Score
-            };
+        //    TeacherCheck teacherCheck = new TeacherCheck()
+        //    {
+        //        TeacherId = TeacherId,
+        //        CheckType = CheckTypes.Arbitration,
+        //        IsOver = true,
+        //        Score = Score
+        //    };
 
 
-            QuestionGroup questionGroup =
-        OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == QuestionGroupId);
+        //    QuestionGroup questionGroup =
+        //OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
-            Question question = questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == QuestionCheckId);
-            question.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck, CheckTypes.Arbitration);
-            question.TeacherCheckManagerx.PressReturn();
+        //    Question question = questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == QuestionCheckId);
+        //    question.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck, CheckTypes.Arbitration);
+        //    question.TeacherCheckManagerx.PressReturn();
         }
 
         private void Get_Click(object sender, RoutedEventArgs e)
         {
 
-            Question question =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
-                    .SeleteArbitrationQuestion();
+            //Question question =
+            //    OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId)
+            //        .SeleteArbitrationQuestion();
 
-            if (question == null)
-            {
-                MessageBox.Show("this is over");
-                return;
-            }
+            //if (question == null)
+            //{
+            //    MessageBox.Show("this is over");
+            //    return;
+            //}
 
-            question.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
-            {
-                TeacherId = TeacherId,
-                QuestionCheckId = question.QuestionCheckId,
-                IsOver = false,
-                CheckType = CheckTypes.Arbitration
-            });
+            //question.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
+            //{
+            //    TeacherId = TeacherId,
+            //    AnswerId = question.QuestionCheckId,
+            //    IsOver = false,
+            //    CheckType = CheckTypes.Arbitration
+            //});
 
 
 
-            QuestionCheckIdLabel.Content = question.QuestionCheckId;
+            //QuestionCheckIdLabel.Content = question.QuestionCheckId;
 
         }
     }

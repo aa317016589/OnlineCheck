@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,10 +39,20 @@ namespace Wpf
         /// <summary>
         /// 当前的题目
         /// </summary>
-        private String QuestionCheckId
+        private String AnswerId
         {
-            get { return QuestionCheckIdLabel.Content.ToString(); }
+            get { return FirstContentLabel.Content.ToString(); }
         }
+
+
+        /// <summary>
+        /// 当前的题目2
+        /// </summary>
+        private String AnswerId2
+        {
+            get { return SecondContentLabel.Content.ToString(); }
+        }
+
 
         /// <summary>
         /// 选择的题组
@@ -52,15 +63,27 @@ namespace Wpf
         }
 
 
+        private String AnswerCheckId
+        {
+            get { return AnswerCheckLabel.Content.ToString(); }
+        }
+
+
         /// <summary>
         /// 打分框
         /// </summary>
         private Double Score
         {
-            get { return Double.Parse(ScoreText.Text); }
+            get { return Double.Parse(FirstScoreText.Text); }
         }
 
-
+        /// <summary>
+        /// 打分框2
+        /// </summary>
+        private Double Score2
+        {
+            get { return Double.Parse(SecondScoreText.Text); }
+        }
 
 
         /// <summary>
@@ -72,34 +95,43 @@ namespace Wpf
         {
             Boolean over = IsOver.IsChecked == true;
 
+            var score = new Dictionary<String, Double>();
+
+            score.Add(AnswerId, Score);
+            score.Add(AnswerId2, Score2);
+
+
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                QuestionCheckId = QuestionCheckId,
-                Score = Score
+                Score = score
             };
 
-            Log.Items.Add(teacherCheck.ToString());
 
 
-            QuestionGroup questionGroup =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
-                    s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
-            questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == QuestionCheckId)
-                .TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
+
+
+
+            AnswerCheck answerCheck = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
+               .SingleOrDefault(s => s.AnswerCheckId == AnswerCheckId);
+
+            answerCheck.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
+
+
+            Log.Items.Add(String.Format("{0} , {1}", TeacherId, answerCheck.AnswerCheckId));
 
             if (!over)
             {
                 OnlineCheckManager.Instance.Enqueue(teacherCheck.TeacherId, new PressCheck()
                 {
-                    QuestionCheckId = teacherCheck.QuestionCheckId,
-                    Score = teacherCheck.Score
+                    Score = teacherCheck.Score,
+                    AnswerCheckId = answerCheck.AnswerCheckId
                 });
             }
             else
             {
-                OnlineCheckManager.Instance.Press(teacherCheck.TeacherId, teacherCheck.QuestionCheckId, teacherCheck.Score);
+                OnlineCheckManager.Instance.Press(teacherCheck.TeacherId, answerCheck.AnswerCheckId, teacherCheck.Score);
             }
 
 
@@ -109,36 +141,24 @@ namespace Wpf
         }
 
 
-
-
+        #region Init
         private void Init()
         {
             IList<Int32> teachers = new List<int>() { 1, 2, 3, 4 };
 
-            IList<String> questionGroupIds = new List<String>() { "5", "6" };
 
 
 
-            List<QuestionGroup> questionGroups = new List<QuestionGroup>();
 
+            QuestionGroup questionGroup = new QuestionGroup("5", JudgeModes.FourReview);
 
-            foreach (var questionGroupId in questionGroupIds)
-            {
-                QuestionGroupList.Items.Add(questionGroupId);
+            Question firstQuestion = new Question(questionGroup.QuestionGroupId, 1001, 4, 25);
 
+            questionGroup.Questions.Add(firstQuestion);
 
-                QuestionGroup questionGroup = new QuestionGroup(questionGroupId, JudgeModes.ThirdReview);
+            Question secondQuestion = new Question(questionGroup.QuestionGroupId, 1002, 5, 15);
 
-
-                questionGroup.Questions.Add(new Question(1, 1, 5, "", JudgeModes.FourReview));
-
-                questionGroup.Questions.Add(new Question(1, 2, 4, "", JudgeModes.FourReview));
-
-
-                questionGroups.Add(questionGroup);
-
-            }
-
+            questionGroup.Questions.Add(secondQuestion);
 
             foreach (var teacher in teachers)
             {
@@ -146,14 +166,64 @@ namespace Wpf
             }
 
 
+            QuestionGroupList.Items.Add(questionGroup.QuestionGroupId);
 
 
+            OnlineCheckManager.Instance.Init(questionGroup, teachers);
 
-            OnlineCheckManager.Instance.Init(questionGroups, teachers);
-
-
+            OnlineCheckManager.Instance.AnswerSheets = CreateAnswerSheets(firstQuestion, secondQuestion);
 
         }
+
+        private List<AnswerSheet> CreateAnswerSheets(Question firstQuestion, Question secondQuestion)
+        {
+            List<AnswerSheet> answerSheets = new List<AnswerSheet>()
+            {
+                new AnswerSheet()
+                {
+                    MaxPicUrl = Guid.NewGuid().ToString(),
+                    StudentSubjectId = new Random().Next(0, 999999),
+                    AnswerChecks = new List<AnswerCheck>()
+                    {
+                        new AnswerCheck(firstQuestion.QuestionGroupId, new List<Answer>()
+                        {
+                            new Answer(firstQuestion, Guid.NewGuid().ToString()),
+                            new Answer(secondQuestion, Guid.NewGuid().ToString())
+                        }, JudgeModes.MultiReview)
+                    }
+                },
+                new AnswerSheet()
+                {
+                    MaxPicUrl = Guid.NewGuid().ToString(),
+                    StudentSubjectId = new Random().Next(0, 999999),
+                    AnswerChecks = new List<AnswerCheck>()
+                    {
+                        new AnswerCheck(firstQuestion.QuestionGroupId, new List<Answer>()
+                        {
+                            new Answer(firstQuestion, Guid.NewGuid().ToString()),
+                            new Answer(secondQuestion, Guid.NewGuid().ToString())
+                        }, JudgeModes.MultiReview)
+                    }
+                },
+                new AnswerSheet()
+                {
+                    MaxPicUrl = Guid.NewGuid().ToString(),
+                    StudentSubjectId = new Random().Next(0, 999999),
+                    AnswerChecks = new List<AnswerCheck>()
+                    {
+                        new AnswerCheck(firstQuestion.QuestionGroupId, new List<Answer>()
+                        {
+                            new Answer(firstQuestion, Guid.NewGuid().ToString()),
+                            new Answer(secondQuestion, Guid.NewGuid().ToString())
+                        }, JudgeModes.MultiReview)
+                    }
+                }
+            };
+
+            return answerSheets;
+        }
+
+        #endregion
 
         /// <summary>
         /// 获取题目
@@ -162,29 +232,25 @@ namespace Wpf
         /// <param name="e"></param>
         private void Get_Click(object sender, RoutedEventArgs e)
         {
-            QuestionGroup questionGroup =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
-                    s => s.QuestionGroupId.ToString() == QuestionGroupId);
+            AnswerSheet answerSheet = OnlineCheckManager.Instance.AnswerSheets.FirstOrDefault(
+                     s => s.AnswerChecks.Any(a => a.QuestionGroupId == QuestionGroupId && a.TeacherCheckManagerx.IsGet(TeacherId)));
 
-
-            Question question = questionGroup.SelectQuestion(TeacherId);
-
-            if (question == null)
+            if (answerSheet == null)
             {
-                MessageBox.Show("this is over");
-                return;
+                MessageBox.Show("木有了"); return;
             }
 
+            AnswerCheck answerCheck = answerSheet.AnswerChecks.SingleOrDefault(s => s.QuestionGroupId == QuestionGroupId);
 
-            QuestionCheckIdLabel.Content = question.QuestionCheckId;
+            answerCheck.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
+             {
+                 TeacherId = TeacherId,
+             });
 
-            question.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
-            {
-                TeacherId = TeacherId,
-                QuestionCheckId = question.QuestionCheckId
-            });
+            AnswerCheckLabel.Content = answerCheck.AnswerCheckId;
 
-            ScoreText.Text = "";
+            FirstContentLabel.Content = answerCheck.Answers[0].AnswerId;
+            SecondContentLabel.Content = answerCheck.Answers[1].AnswerId;
         }
 
 
@@ -203,7 +269,7 @@ namespace Wpf
 
             foreach (var pressCheck in queuesPressChecks)
             {
-                PressCheckList.Items.Add(pressCheck.QuestionCheckId);
+                PressCheckList.Items.Add(pressCheck.AnswerCheckId);
             }
         }
 
@@ -238,13 +304,19 @@ namespace Wpf
             }
 
 
-            PressCheck pressCheck = OnlineCheckManager.Instance.PressReview[TeacherId].SingleOrDefault(s => s.QuestionCheckId == PressCheckList.SelectedValue.ToString());
+            PressCheck pressCheck = OnlineCheckManager.Instance.PressReview[TeacherId].SingleOrDefault(s => s.AnswerCheckId == PressCheckList.SelectedValue.ToString());
 
             IsOver.IsChecked = true;
 
-            QuestionCheckIdLabel.Content = pressCheck.QuestionCheckId;
+            FirstContentLabel.Content = pressCheck.Score.FirstOrDefault().Key;
 
-            ScoreText.Text = pressCheck.Score.ToString();
+            FirstScoreText.Text = pressCheck.Score.FirstOrDefault().Value.ToString();
+
+            AnswerCheckLabel.Content = pressCheck.AnswerCheckId;
+
+            SecondContentLabel.Content = pressCheck.Score.LastOrDefault().Key;
+
+            SecondScoreText.Text = pressCheck.Score.LastOrDefault().Value.ToString();
         }
 
 
@@ -260,17 +332,16 @@ namespace Wpf
             {
                 TeacherId = TeacherId,
                 CheckType = CheckTypes.Doubt,
-                QuestionCheckId = QuestionCheckId,
-                Score = 0
+                Score = new Dictionary<string, double>()
             };
 
 
-            QuestionGroup questionGroup =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
-                    s => s.QuestionGroupId.ToString() == QuestionGroupId);
 
-            questionGroup.Questions.SingleOrDefault(s => s.QuestionCheckId == QuestionCheckId)
-                .TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
+            AnswerCheck answerCheck = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
+                .SingleOrDefault(s => s.AnswerCheckId == AnswerCheckId);
+
+
+            answerCheck.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
 
         }
 
@@ -285,12 +356,22 @@ namespace Wpf
         {
             foreach (var questionGroup in OnlineCheckManager.Instance.QuestionGroups)
             {
-                var v2 = questionGroup.Questions.ToDictionary(k => k.QuestionCheckId, v => v.TeacherCheckManagerx.FinalScore);
+                // var v2 = questionGroup.Questions.SelectMany(s=>s.).ToDictionary(k => k.QuestionCheckId, v => v.TeacherCheckManagerx.FinalScore);
 
-                foreach (var d in v2)
+                IEnumerable<AnswerCheck> answerChecks = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
+                      .Where(s => s.QuestionGroupId == questionGroup.QuestionGroupId);
+
+                foreach (var answerCheck in answerChecks)
                 {
-                    S1.Items.Add(String.Format("{0} {1}", d.Key, d.Value));
+                    S1.Items.Add(answerCheck.AnswerCheckId);
                 }
+
+
+                //OnlineCheckManager.Instance.AnswerSheets.SelectMany(s=>s.Answers)
+                // foreach (var d in v2)
+                // {
+                //     S1.Items.Add(String.Format("{0} {1}", d.Key, d.Value));
+                // }
             }
         }
 
@@ -302,7 +383,7 @@ namespace Wpf
         /// <param name="e"></param>
         private void Enter_Click(object sender, RoutedEventArgs e)
         {
-            OnlineCheckManager.Instance.Clear(TeacherId, QuestionGroupId);
+            OnlineCheckManager.Instance.Clear(TeacherId);
             PressCheckList.Items.Clear();
         }
 
@@ -318,6 +399,19 @@ namespace Wpf
         {
             DoubtWindow doubtWindow = new DoubtWindow(QuestionGroupId, TeacherId);
             doubtWindow.Show();
+        }
+
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            AnswerCheck answerCheck = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
+                   .SingleOrDefault(s => s.AnswerCheckId == AnswerChckIdText.Text);
+        }
+
+        private void Log_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+
+            AnswerChckIdText.Text = listBox.SelectedItem.ToString();
         }
     }
 }
