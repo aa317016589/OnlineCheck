@@ -43,7 +43,9 @@ namespace OnlineCheck
         Ordinary = 1,
         [Description("问题")]
         Doubt,
+        [Description("解决问题")]
+        SolveDoubt,
         [Description("仲裁")]
-        Arbitration,
+        Arbitration
     }
 }

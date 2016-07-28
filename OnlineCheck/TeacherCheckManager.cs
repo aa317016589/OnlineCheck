@@ -11,11 +11,6 @@ namespace OnlineCheck
         protected List<Answer> ReadyCheckAnswers { get; set; }
 
         /// <summary>
-        /// 阀值
-        /// </summary>
-        protected Double Threshold;
-
-        /// <summary>
         /// 是否完全结束
         /// </summary>
         public Boolean IsAllFinish { get; set; }
@@ -51,13 +46,21 @@ namespace OnlineCheck
                 return false;
             }
 
+            TeacherCheck teacherCheck = TeacherChecks.SingleOrDefault(s => s.TeacherId == teacherId);
+
+            if (teacherCheck != null)
+            {
+                return !teacherCheck.IsOver;
+            }
+
+
             if (TeacherChecks.Count >= EnoughCount)
             {
                 return false;
             }
 
 
-            return !TeacherChecks.Any(s => s.TeacherId == teacherId && s.IsOver);
+            return true;
         }
 
 
@@ -128,8 +131,6 @@ namespace OnlineCheck
 
             teacherCheck.IsOver = true;
 
-            teacherCheck.CheckType = readyTeacherCheck.CheckType;
-
             teacherCheck.Score = readyTeacherCheck.Score;
 
             if (teacherCheck.CheckType == CheckTypes.Doubt)
@@ -151,11 +152,15 @@ namespace OnlineCheck
                 return;
             }
 
-
+            ReadyCheckAnswers.ForEach(s =>
+            {
+                s.FinalScore = teacherCheck.Score[s.AnswerId];
+            });
 
             TeacherChecks.Add(teacherCheck);
 
             IsAllFinish = true;
+
         }
 
         /// <summary>
@@ -171,6 +176,17 @@ namespace OnlineCheck
             ThirdCounter = ThirdCounter + 1;
             Statistics();
         }
+
+        public Dictionary<String, Double> GetFinalScore()
+        {
+            if (IsDoubt || IsArbitration || !IsAllFinish )
+            {
+                return null;
+            }
+
+            return ReadyCheckAnswers.ToDictionary(k => k.AnswerId, v => v.FinalScore);
+        }
+
     }
 
     /// <summary>
@@ -244,12 +260,23 @@ namespace OnlineCheck
 
             if (ThirdCounter == 2)
             {
+                Boolean flag = false;
+
                 foreach (var readyCheckAnswer in ReadyCheckAnswers)
                 {
-                    IsAllow = IsAllow && OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray()) >
-                     readyCheckAnswer.QuestionInfo.Threshold;                
+
+                    Boolean a = (OnlineHelper.GetMinThreshold(
+                             TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray()) >
+                          readyCheckAnswer.QuestionInfo.Threshold);
+                    flag = flag || a;
+
+                    if (flag)
+                    {
+                        break; ;
+                    }
                 }
 
+                IsAllow = flag;
 
                 //    IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
 
@@ -294,14 +321,27 @@ namespace OnlineCheck
 
             if (!IsArbitration)
             {
-            //    IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+                //    IsAllow = OnlineHelper.GetMinThreshold(TeacherChecks.Select(s => s.Score).ToArray()) > Threshold;
+                Boolean flag = false;
 
                 foreach (var readyCheckAnswer in ReadyCheckAnswers)
                 {
-                    IsAllow = IsAllow && OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray()) >
+
+                    Double f =
+                        OnlineHelper.GetMinThreshold(
+                            TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray());
+
+                    flag = flag || f >
                      readyCheckAnswer.QuestionInfo.Threshold;
+
+                    if (flag)
+                    {
+                        break;
+                    }
+
                 }
 
+                IsAllow = flag;
 
                 if (IsAllow)
                 {

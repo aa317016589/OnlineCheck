@@ -96,7 +96,7 @@ namespace Wpf
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                CheckType = CheckTypes.Doubt,
+                CheckType = CheckTypes.SolveDoubt,
                 Score = score
             };
 
@@ -124,7 +124,7 @@ namespace Wpf
             answerCheck.TeacherCheckManagerx.AddTeacherChecks(new TeacherCheck()
             {
                 TeacherId = TeacherId,
-                CheckType = CheckTypes.Doubt,
+                CheckType = CheckTypes.SolveDoubt,
                 Score = new Dictionary<string, double>()
             });
 

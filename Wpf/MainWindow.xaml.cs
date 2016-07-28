@@ -171,11 +171,11 @@ namespace Wpf
 
             OnlineCheckManager.Instance.Init(questionGroup, teachers);
 
-            OnlineCheckManager.Instance.AnswerSheets = CreateAnswerSheets(firstQuestion, secondQuestion);
+            OnlineCheckManager.Instance.AnswerSheets = CreateAnswerSheets(questionGroup, firstQuestion, secondQuestion);
 
         }
 
-        private List<AnswerSheet> CreateAnswerSheets(Question firstQuestion, Question secondQuestion)
+        private List<AnswerSheet> CreateAnswerSheets(QuestionGroup questionGroup, Question firstQuestion, Question secondQuestion)
         {
             List<AnswerSheet> answerSheets = new List<AnswerSheet>()
             {
@@ -189,7 +189,7 @@ namespace Wpf
                         {
                             new Answer(firstQuestion, Guid.NewGuid().ToString()),
                             new Answer(secondQuestion, Guid.NewGuid().ToString())
-                        }, JudgeModes.MultiReview)
+                        }, questionGroup.JudgeMode)
                     }
                 },
                 new AnswerSheet()
@@ -202,7 +202,7 @@ namespace Wpf
                         {
                             new Answer(firstQuestion, Guid.NewGuid().ToString()),
                             new Answer(secondQuestion, Guid.NewGuid().ToString())
-                        }, JudgeModes.MultiReview)
+                        }, questionGroup.JudgeMode)
                     }
                 },
                 new AnswerSheet()
@@ -215,7 +215,7 @@ namespace Wpf
                         {
                             new Answer(firstQuestion, Guid.NewGuid().ToString()),
                             new Answer(secondQuestion, Guid.NewGuid().ToString())
-                        }, JudgeModes.MultiReview)
+                        }, questionGroup.JudgeMode)
                     }
                 }
             };
@@ -250,7 +250,11 @@ namespace Wpf
             AnswerCheckLabel.Content = answerCheck.AnswerCheckId;
 
             FirstContentLabel.Content = answerCheck.Answers[0].AnswerId;
+
             SecondContentLabel.Content = answerCheck.Answers[1].AnswerId;
+
+            FirstScoreText.Text = "";
+            SecondScoreText.Text = "";
         }
 
 
