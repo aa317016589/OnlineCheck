@@ -1,0 +1,101 @@
+// main: ../teacherIndex.less
+.stitches-sprite(@x: 0, @y: 0, @width: 0, @height: 0) {
+    background-position: @x @y;
+    width: @width;
+    height: @height;
+}
+
+.sprite {
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url(../images/spritesheet.png);
+    background-repeat: no-repeat;
+
+    &.sprite-arbitration {
+        .stitches-sprite(-5px, -5px, 6px, 33px);
+    }
+
+    &.sprite-arbitration-hover {
+        .stitches-sprite(-21px, -5px, 6px, 33px);
+    }
+
+    &.sprite-class-report {
+        .stitches-sprite(-37px, -5px, 34px, 12px);
+    }
+
+    &.sprite-class-report-hover {
+        .stitches-sprite(-81px, -5px, 34px, 12px);
+    }
+
+    &.sprite-look-process {
+        .stitches-sprite(-100px, -146px, 31px, 31px);
+    }
+
+    &.sprite-look-process-hover {
+        .stitches-sprite(-125px, -5px, 31px, 31px);
+    }
+
+    &.sprite-online-enter {
+        .stitches-sprite(-37px, -46px, 31px, 31px);
+    }
+
+    &.sprite-online-enter-hover {
+        .stitches-sprite(-78px, -46px, 31px, 31px);
+    }
+
+    &.sprite-online-look {
+        .stitches-sprite(-119px, -46px, 39px, 39px);
+    }
+
+    &.sprite-page-generater {
+        .stitches-sprite(-5px, -95px, 37px, 37px);
+    }
+
+    &.sprite-question {
+        .stitches-sprite(-52px, -95px, 28px, 31px);
+    }
+
+    &.sprite-question-hover {
+        .stitches-sprite(-90px, -95px, 29px, 31px);
+    }
+
+    &.sprite-report-analyze {
+        .stitches-sprite(-129px, -95px, 38px, 37px);
+    }
+
+    &.sprite-result-report {
+        .stitches-sprite(-168px, -5px, 38px, 38px);
+    }
+
+    &.sprite-result-report-hover {
+        .stitches-sprite(-177px, -53px, 38px, 38px);
+    }
+
+    &.sprite-school-report {
+        .stitches-sprite(-177px, -101px, 33px, 25px);
+    }
+
+    &.sprite-school-report-hover {
+        .stitches-sprite(-52px, -136px, 33px, 25px);
+    }
+
+    &.sprite-topic-group-setting {
+        .stitches-sprite(-177px, -136px, 31px, 31px);
+    }
+
+    &.sprite-topic-group-setting-hover {
+        .stitches-sprite(-5px, -177px, 31px, 31px);
+    }
+
+    &.sprite-wrong-download {
+        .stitches-sprite(-46px, -177px, 38px, 38px);
+    }
+
+    &.sprite-translate {
+        .stitches-sprite(-105px, -184px, 38px, 33px);
+    }
+
+    &.sprite-translate-hover {
+        .stitches-sprite(-153px, -184px, 38px, 33px);
+    }
+}

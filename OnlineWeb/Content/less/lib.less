@@ -1,0 +1,427 @@
+@charset 'utf-8';
+
+@yahei: Microsoft YaHei, '微软雅黑', MicrosoftJhengHei;
+@images: '../images';
+@danger: #ff0000;
+@success: #5cb85c;
+@warning: #f0ad4e;
+.iconfont(@fontSize: 16px) {
+    font-family: 'iconfont' !important;
+    font-size: @fontSize;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/**
+* 截断文本
+*/
+.text-overflow() {
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+/**
+* 清除浮动
+*/
+.clearfix() {
+    *zoom: 1;
+    &:after {
+        display: block;
+        height: 0;
+        content: '.';
+        clear: both;
+        visibility: hidden;
+    }
+}
+/**
+* 响应式图片
+*/
+.img-responsive(){
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+/**
+* 尺寸
+*/
+.size(@width; @height) {
+  width: @width;
+  height: @height;
+}
+.square(@size) {
+  .size(@size; @size);
+}
+
+/**
+ * inline-block
+ */
+.inline-block () {
+    /* 如果有必要可在其父元素上应用样式vertical-align:top; */
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * 文字隐藏
+ */
+.text-hidden () {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/**
+ * 文字(强制)折行
+ */
+.text-break () {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+/**
+ * 自定义字体
+ */
+.font-face(@path, @font-name) {
+    @font-face {
+        font-family: @font-name;
+        src: url('@{path}/@{font-name}.eot');
+        src: url('@{path}/@{font-name}.eot?#iefix') format('embedded-opentype'),
+            url('@{path}/@{font-name}.woff') format('woff'),
+            url('@{path}/@{font-name}.ttf') format('truetype'),
+            url('@{path}/@{font-name}.svg#svgFontName') format('svg');
+    }
+}
+
+
+/**
+ * 透明
+ */
+.opacity (@a: 0.3) {
+    @aa: (@a*100);
+    opacity: @a;
+    filter: ~"Alpha(Opacity=@{aa})"; /* ie5-8 */
+    *zoom: 1;
+}
+/**
+ * 背景透明
+ */
+.background-rgba (@r: 0, @g: 0, @b: 0, @a: 0.3) {
+    @c: rgba(@r, @g, @b, @a);
+    @cc: argb(@c);
+    background-color:@c;
+    filter:~"progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='@{cc}',EndColorStr='@{cc}')";
+    *zoom: 1;
+}
+/**
+ * 圆角
+ */
+.border-radius (@a: 3px) {
+    -webkit-border-radius: @a;
+       -moz-border-radius: @a;
+            border-radius: @a;
+}
+
+/**
+ * 阴影
+ */
+.box-shadow ( @a: 0 1px 3px rgba(0,0,0,.3); ) {
+    -webkit-box-shadow: @a;
+       -moz-box-shadow: @a;
+            box-shadow: @a;
+}
+
+
+/**
+ * 渐变
+ */
+.linear-gradient (@a: #ffa600; @b: #fe9200) {
+    filter: ~'progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr="@{a}", endColorstr="@{b}")';
+    background-image: -webkit-linear-gradient(top,@a, @b);
+    background-image: -moz-linear-gradient(top,@a, @b);
+    background-image: -ms-linear-gradient(top,@a  0,@b 100%);
+    background-image: -o-linear-gradient(top,@a, @b);
+    background-image: linear-gradient(top,@a, @b);
+}
+
+/**
+ * 禁用渐变
+ */
+.linear-gradientDisable () {
+    filter: ~'progid:DXImageTransform.Microsoft.gradient(enabled=false)';
+    background-image: none;
+}
+
+/**
+ * box-sizing
+ */
+.box-sizing ( @a: content-box ) {
+    -webkit-box-sizing: @a;
+       -moz-box-sizing: @a;
+            box-sizing: @a;
+}
+
+/**
+ * 利用边框制作小三角
+ */
+.triangle (@type: bottom, @x: 10px, @c: #999, @y: @x) {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    vertical-align: middle;
+    // 这里有意利用IE6对dashed渲染缺陷解决IE6不支持transparent的问题
+    @transparent: @y dashed transparent;
+    // 该特殊边框的大小必须小于其他边框大小的四倍，否则IE6会有问题
+    @special: @x solid @c;
+    .border();
+    .border () when (@type =bottom) {
+        border-bottom: @special;
+        border-left: @transparent;
+        border-right: @transparent;
+    }
+    .border () when (@type =top) {
+        border-top: @special;
+        border-left: @transparent;
+        border-right: @transparent;
+    }
+    .border () when (@type =left) {
+        border-left: @special;
+        border-top: @transparent;
+        border-bottom: @transparent;
+    }
+    .border () when (@type =right) {
+        border-right: @special;
+        border-top: @transparent;
+        border-bottom: @transparent;
+    }
+}
+
+
+/**
+ * 鼠标经过旋转
+ */
+.Rotate (@d:180deg, @s:.3s) {
+    -webkit-transition: @s ease-in;
+    -moz-transition: @s ease-in;
+    -o-transition: @s ease-in;
+    transition: @s ease-in;
+
+    &:hover, &-hover {
+        -webkit-transform: rotate(@d);
+        -moz-transform: rotate(@d);
+        -ms-transform: rotate(0);
+        -o-transform: rotate(@d);
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+        -ms-filter: ~"progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+        transform: rotate(@d);
+    }
+}
+/**
+ * 去色(不兼容低版本Safari、Opera和某些firefox), 一般用于哀悼日)
+ */
+.grayscale() {
+    -webkit-filter: grayscale(100%);
+    -webkit-filter: grayscale(1);
+    /* Chrome 19+ & Safari 6+ */
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    /* firefox 3.5+，慎用！存在性能问题 */
+    filter: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale');
+    filter: gray;
+    /* IE6~9 */
+}
+
+/**
+ * 最大高度
+ */
+.max-height(@h, @pd: 0) {
+
+    @Hnum: unit(@h);
+    @PDnum: unit(@pd);
+
+    max-height: @h;
+    _height:~"expression( (this.clientHeight-@{PDnum})>@{Hnum}? @{Hnum} : (this.clientHeight-@{PDnum}) )";
+    _overflow: hidden;
+    _zoom: 1;
+
+    /*
+     * clientHeight = height + padding;
+     * offsetHeight = height + padding+border;
+     */
+}
+.max-width(@h, @pd: 0) {
+
+    @Hnum: unit(@h);
+    @PDnum: unit(@pd);
+
+    max-width: @h;
+    _width:~"expression( (this.clientWidth-@{PDnum})>@{Hnum}? @{Hnum} : (this.clientWidth-@{PDnum}) )";
+    _overflow: hidden;
+    _zoom: 1;
+
+}
+.min-height(@h, @pd: 0) {
+
+    @Hnum: unit(@h);
+    @PDnum: unit(@pd);
+
+    min-height: @h;
+    _height:~"expression( (this.clientHeight-@{PDnum})<@{Hnum}? @{Hnum} : (this.clientHeight-@{PDnum}) )";
+    _overflow: hidden;
+    _zoom: 1;
+
+}
+
+// 一个老外的博客中看到的：
+.min-height2(@h) {
+  min-height: @h;
+  height: auto !important; /*all browsers except ie6 will respect the !important flag*/
+  height: @h; /*Should have the same value as the min height above*/
+}
+
+.min-width(@h, @pd: 0) {
+
+    @Hnum: unit(@h);
+    @PDnum: unit(@pd);
+
+    min-width: @h;
+    _width:~"expression( (this.clientWidth-@{PDnum})<@{Hnum}? @{Hnum} : (this.clientWidth-@{PDnum}) )";
+    _overflow: hidden;
+    _zoom: 1;
+
+}
+
+.clip (@t: 0px, @r: 0px, @b: 0px, @l: 0px) {
+    position:absolute; clip:rect; /* 矩形剪裁只能作用于 position:absolute|fixed 的元素上 */
+    clip: rect(@t @r @b @l); /* IE6, IE7 */
+    clip: rect(@t, @r, @b, @l);
+}
+
+// 解决Retina屏幕下的图像显示
+.retina-image(@file-1x, @file-2x, @width-1x, @height-1x) {
+  background-image: url("@{file-1x}");
+
+  @media
+  only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (   min--moz-device-pixel-ratio: 2),
+  only screen and (     -o-min-device-pixel-ratio: 2/1),
+  only screen and (        min-device-pixel-ratio: 2),
+  only screen and (                min-resolution: 192dpi),
+  only screen and (                min-resolution: 2dppx) {
+    background-image: url("@{file-2x}");
+    background-size: @width-1x @height-1x;
+  }
+}
+
+.image-set (@a1, @a2) {
+    /*
+     * 解决Retina屏幕下的图像显示，淘宝首页的css sprite解决方案
+     * image-set是CSS4的属性，"safari6"和“chrome21”支持
+     * 如果浏览器支持image-set，普通显屏，此时浏览器会选择image-set中的@1x背景图像; Retina屏幕，此时浏览器会选择image-set中的@2x背景图像;
+     * 扩展阅读：http://www.w3cplus.com/css/safari-6-and-chrome-21-add-image-set-to-support-retina-images.html
+     */
+    background: url(@a1);
+    background-image: -webkit-image-set(url(@a1) 1x, url(@a2) 2x);
+    background-image: -moz-image-set(url(@a1) 1x,url(@a2) 2x);
+    background-image: -ms-image-set(url(@a1) 1x,url(@a2) 2x);
+    background-image: -o-image-set(url(@a1) 1x,url(@a2) 2x);
+    background-repeat: no-repeat;
+}
+
+.user-select(@select: auto) {
+  -webkit-user-select: @select;
+     -moz-user-select: @select;
+      -ms-user-select: @select;
+       -o-user-select: @select;
+          user-select: @select;
+}
+
+
+/*完全居中
+* 1.必须声明元素[max-]height和[max-]width
+* 2.Chrome, Firefox, Safari, Mobile Safari, IE8+; 不支持Windows Phone无效
+*/
+.absolute-center() {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+    resize: both;
+    // 不支持移动版浏览器和IE10-, [可选]
+}
+
+// 图片水平垂直居中: http://blog.moocss.com/code-snippets/html-css-code-snippets/1390.html
+.image-center(@w, @h: @w){
+  @width: unit(@w);
+  @height: unit(@h);
+  @_fontsize: (@height * 0.873);
+
+  width: ~'@{width}px';
+  height: ~'@{height}px';
+  overflow: hidden;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+
+  *display: block;//IE hack
+  *font: ~"@{_fontsize}px/1em Arial";
+
+  img{
+    display: inline;
+    max-height: 100%;
+    max-width: 100%;
+    vertical-align: middle;
+  }
+}
+
+// CSS3 "栅格化"(flexbox)：http://www.zhihu.com/question/22991944
+.display-box() {
+    display: -webkit-box;  /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */
+    display: -moz-box;     /* Firefox 17- */
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */
+    display: -moz-flex;    /* Firefox 18+ */
+    display: -ms-flexbox;  /* IE 10 */
+    display: flex;         /* Chrome 29+, Firefox 22+, IE 11+, Opera 12.1/17/18, Android 4.4+ */
+}
+.box-flex(@a) {
+    -webkit-box-flex: @a;
+    -moz-box-flex: @a;
+    box-flex: @a;
+}
+
+.animation(@a) {
+    -webkit-animation: @a;
+    -moz-animation: @a;
+    -o-animation: @a;
+    animation: @a;
+}
+
+.animation-delay(@a) {
+    -webkit-animation-delay: @a;
+    -moz-animation-delay: @a;
+    -o-animation-delay: @a;
+    animation-delay: @a;
+}
+
+.transition(@a) {
+    -webkit-transition: @a;
+    -moz-transition: @a;
+    -o-transition: @a;
+    transition: @a;
+}
+
+.transform(@a) {
+    -webkit-transform: @a;
+    -moz-transform: @a;
+    -ms-transform: @a;
+    -o-transform: @a;
+    transform: @a;
+}

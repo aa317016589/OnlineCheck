@@ -1,0 +1,256 @@
+//main: ../gobal.less
+/**
+ * 按钮
+ */
+.cbtn {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    padding: 4px 10px;
+    color: #333;
+    font-size: 12px;
+    font-family: @yahei;
+    text-align: center;
+    text-decoration: none;
+    font-weight: normal;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: 15px 50%;
+    overflow: hidden;
+    vertical-align: middle;
+    white-space: nowrap;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    &:hover {
+        background-color: #e6e6e6;
+        border-color: #adadad;
+        text-decoration: none;
+        color: #333;
+    }
+    &.disabled {
+        cursor: default;
+        filter: alpha(opacity=65);
+        opacity: 0.65;
+    }
+    &.btn-fn {
+        display: block;
+        line-height: 28px;
+        font-weight: normal;
+        padding: 0 19px 0 35px;
+        font-size: 14px;
+        &.icon-none {
+            padding: 0 35px;
+        }
+        &.btn-table {
+            display: inline-block;
+            margin: 8px 5px 8px 0;
+            line-height: 23px;
+        }
+    }
+    &.btn-primary {
+        padding: 0 22px;
+        height: 38px;
+        font-size: 16px;
+        line-height: 38px;
+        color: #fff;
+        border-color: #cf6700;
+        background-color: #f1871d;
+        &:hover {
+            background-color: #e87400;
+            text-decoration: none;
+        }
+    }
+    &.btn-inline {
+        display: inline-block;
+    }
+    &.btn-extend {
+        position: relative;
+        overflow: visible;
+        outline: none;
+        background-image: url('@{images}/icon-up-arrow.png');
+        &:before, &:after {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            .size(0, 0);
+            content: '';
+            border: 6px solid transparent;
+            border-bottom: 8px solid #cfcfcf;
+        }
+        &:after {
+            top: 32px;
+            border-bottom-color: #f7f7f7;
+        }
+    }
+    /**
+     * 按钮颜色
+     */
+    &.btn-blue {
+        background-color: #029cde;
+        border-color: #0082ba;
+        color: #fff;
+        &:focus, &:hover {
+            background-color: #007cb1;
+        }
+    }
+    &.btn-orange {
+        background-color: #f1871d;
+        border-color: #cf6700;
+        color: #fff;
+        &:focus, &:hover {
+            background-color: #e87400;
+            text-decoration: none;
+        }
+    }
+    &.btn-danger {
+        color: #fff;
+        background-color: #d9534f;
+        border-color: #ac2925;
+        &:focus, &:hover {
+            background-color: #c9302c;
+        }
+    }
+    &.btn-success {
+        background-color: #48a348;
+        border-color: #4cae4c;
+        color: #fff;
+        &:focus, &:hover {
+            background-color: #449d44;
+        }
+    }
+    &.btn-chart {
+        display: block;
+        height: 26px;
+        line-height: 26px;
+        padding: 0;
+        margin-bottom: 10px;
+        background-color: #fff;
+        color: #666;
+        border-color: #ccc;
+        &:focus, &:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #ccc;
+        }
+        &.selected {
+            background-color: #029cde;
+            color: #fff;
+            border-color: #029cde;
+        }
+        &.disabled {
+            opacity: 0.6;
+            filter: alpha(opacity=60);
+            cursor: default;
+            &:focus, &:hover {
+                text-decoration: none;
+                color: #666;
+                background-color: #fff;
+            }
+        }
+    }
+    /**
+     * 按钮图标
+     */
+    &.icon-plus {
+        background-image: url('@{images}/icon_fun_add.png');
+    }
+    &.icon-delete {
+        background-image: url('@{images}/icon_fun_delete.png');
+    }
+    &.icon-lock {
+        background-image: url('@{images}/icon_fun_clock.png');
+        background-position-y: 6px;
+    }
+    &.icon-search {
+        background-image: url('@{images}/icon_fun_search.png');
+    }
+    &.icon-export {
+        background-image: url('@{images}/icon_fun_export.png');
+    }
+    &.icon-print {
+        background-image: url('@{images}/icon_fun_print.png');
+    }
+    &.icon-statistics {
+        background-image: url('@{images}/icon_ts_statistics.png');
+    }
+    &.icon-download {
+        background-image: url('@{images}/icon_fun_download.png');
+    }
+    .iconfont {
+        margin-right: 2px;
+        font-size: 12px;
+        vertical-align: baseline;
+    }
+}
+.icon-btn {
+    display: inline-block;
+    *display: inline;
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: 2px center;
+    *zoom: 1;
+}
+.icon-text {
+    display: inline-block;
+    padding-left: 20px;
+    color: #029CDE;
+    line-height: 20px;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-decoration: none;
+}
+/**
+ * 图标
+ */
+.icon-clock {
+    background-image: url('@{images}/icon_ts_clock.png');
+}
+.icon-bookmark {
+    background-image: url('@{images}/icon_ts_bookmark.png');
+}
+.icon-school {
+    background-image: url('@{images}/icon_ts_school.png');
+}
+.icon-class {
+    background-image: url('@{images}/icon_ts_class.png');
+}
+.icon-subject {
+    background-image: url('@{images}/icon_ts_subject.png');
+}
+.icon-img {
+    background-image: url('@{images}/icon_fun_tab_img.png');
+}
+.icon-list {
+    background-image: url('@{images}/icon_fun_tab_list.png');
+}
+.icon-edit {
+    background-image: url('@{images}/icon_fun_tab_edit.png');
+}
+.icon-edit-transparent {
+    background-image: url('@{images}/icon_fun_edit.png');
+}
+.icon-delete {
+    background-image: url('@{images}/icon_fun_tab_delete.png');
+}
+.icon-tab-download {
+    background-image: url('@{images}/icon_fun_tab_download.png');
+}
+.icon-up-arrow {
+    background-image: url('@{images}/icon-up-arrow.png');
+}
+.icon-down-arrow {
+    background-image: url('@{images}/icon-down-arrow.png');
+}
+.icon-restore {
+    background-image: url('@{images}/icon_fun_tab_back.png');
+}

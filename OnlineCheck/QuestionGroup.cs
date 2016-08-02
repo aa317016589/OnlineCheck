@@ -29,6 +29,8 @@ namespace OnlineCheck
 
         public Int32 QuestionId { get; private set; }
 
+        public String QuestionNo { get; private set; }
+
         public Double MaxScore { get; private set; }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace OnlineCheck
         /// </summary>
         public Int32 Threshold { get; private set; }
 
-        public Question(String questionGroupId, Int32 questionId, Int32 threshold, Double maxScore)
+        public Question(String questionGroupId, String questionNo, Int32 threshold, Double maxScore, Int32 questionId)
         {
             Threshold = threshold;
 
@@ -45,6 +47,8 @@ namespace OnlineCheck
             MaxScore = maxScore;
 
             QuestionGroupId = questionGroupId;
+
+            QuestionNo = questionNo;
         }
 
     }
@@ -110,7 +114,7 @@ namespace OnlineCheck
 
         public Double Score
         {
-            get { return AnswerChecks.Average(s => s.Answers.Average(a => a.FinalScore)); }
+            get { return AnswerChecks.Sum(s => s.Answers.Sum(a => a.FinalScore)); }
         }
 
         public List<AnswerCheck> AnswerChecks { get; set; }
@@ -133,11 +137,15 @@ namespace OnlineCheck
         /// </summary>
         public Boolean IsPressed { get; set; }
 
+        public DateTime CreateDateTime { get; set; }
+
         public PressCheck()
         {
             Id = Guid.NewGuid().ToString();
 
             IsPressed = false;
+
+            CreateDateTime = DateTime.Now;
         }
     }
 }

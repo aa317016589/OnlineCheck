@@ -1,0 +1,122 @@
+//main: ../admin.less
+
+/**
+ * 首页
+ */
+
+.index-top {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    .index-top-wrapper {
+        padding: 0 15px;
+        color: #fff;
+        background-color: #029BDE;
+        .clearfix;
+        .index-logo {
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+            img {
+                display: block;
+            }
+        }
+        .index-user-info {
+            float: right;
+            line-height: 60px;
+            >a {
+                color: #fff;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    .loading-bar {
+        position: absolute;
+        top: 57px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: #f1871d;
+    }
+}
+
+.index-container {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #0082ba;
+}
+
+.index-container-left {
+    position: absolute;
+    width: 209px;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    border: none;
+    border-right: 1px solid #b9b9b9;
+}
+
+.index-container-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 210px;
+    height: 100%;
+    transition: left .2s;
+    &.collapsed {
+        left: 0;
+    }
+    .index-crumbs {
+        line-height: 38px;
+        color: #333;
+        background-color: #F7F7F7;
+        border-bottom: 1px solid #d0d0d0;
+        .clearfix;
+    }
+    .btn-change-menu {
+        float: left;
+        .square(39px);
+        background: url('../images/nav_btn.gif') 0 0 no-repeat;
+        border: none;
+        outline: none;
+    }
+    .curmbs-paths {
+        margin-left: 50px;
+    }
+    .index-content-wrapper {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #fff;
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+    }
+    .index-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+}

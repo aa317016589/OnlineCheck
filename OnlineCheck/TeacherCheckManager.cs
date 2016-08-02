@@ -6,7 +6,7 @@ namespace OnlineCheck
 {
     public abstract class TeacherCheckManager
     {
-        protected List<TeacherCheck> TeacherChecks;
+        public List<TeacherCheck> TeacherChecks;
 
         protected List<Answer> ReadyCheckAnswers { get; set; }
 
@@ -67,7 +67,7 @@ namespace OnlineCheck
         /// <summary>
         /// 打分集合上限数
         /// </summary>
-        protected Int32 EnoughCount { get; set; }
+        public Int32 EnoughCount { get; set; }
 
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace OnlineCheck
         /// <summary>
         /// 已提交回评数
         /// </summary>
-        protected Int32 ThirdCounter { get; set; }
+        public Int32 ThirdCounter { get; set; }
 
 
 
@@ -133,7 +133,7 @@ namespace OnlineCheck
 
             teacherCheck.Score = readyTeacherCheck.Score;
 
-            if (teacherCheck.CheckType == CheckTypes.Doubt)
+            if (readyTeacherCheck.CheckType == CheckTypes.Doubt)
             {
                 IsDoubt = true;
 
@@ -154,7 +154,7 @@ namespace OnlineCheck
 
             ReadyCheckAnswers.ForEach(s =>
             {
-                s.FinalScore = teacherCheck.Score[s.AnswerId];
+                s.FinalScore = teacherCheck.Score[s.QuestionInfo.QuestionId.ToString()];
             });
 
             TeacherChecks.Add(teacherCheck);
@@ -204,7 +204,7 @@ namespace OnlineCheck
         {
             ReadyCheckAnswers.ForEach(s =>
             {
-                s.FinalScore = TeacherChecks.SingleOrDefault().Score[s.AnswerId];
+                s.FinalScore = TeacherChecks.SingleOrDefault().Score[s.QuestionInfo.QuestionId.ToString()];
             });
 
             IsAllFinish = true;
@@ -231,7 +231,7 @@ namespace OnlineCheck
 
             ReadyCheckAnswers.ForEach(s =>
             {
-                s.FinalScore = TeacherChecks.Average(a => a.Score[s.AnswerId]);
+                s.FinalScore = TeacherChecks.Average(a => a.Score[s.QuestionInfo.QuestionId.ToString()]);
             });
 
             IsAllFinish = true;
@@ -266,7 +266,7 @@ namespace OnlineCheck
                 {
 
                     Boolean a = (OnlineHelper.GetMinThreshold(
-                             TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray()) >
+                             TeacherChecks.Select(s => s.Score[readyCheckAnswer.QuestionInfo.QuestionId.ToString()]).ToArray()) >
                           readyCheckAnswer.QuestionInfo.Threshold);
                     flag = flag || a;
 
@@ -293,7 +293,7 @@ namespace OnlineCheck
 
             ReadyCheckAnswers.ForEach(s =>
             {
-                s.FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(a => a.Score[s.AnswerId]).ToArray());
+                s.FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(a => a.Score[s.QuestionInfo.QuestionId.ToString()]).ToArray());
             });
             //FinalScore = OnlineHelper.GetMiddleScore(TeacherChecks.Select(s => s.Score).ToArray());
         }
@@ -329,7 +329,7 @@ namespace OnlineCheck
 
                     Double f =
                         OnlineHelper.GetMinThreshold(
-                            TeacherChecks.Select(s => s.Score[readyCheckAnswer.AnswerId]).ToArray());
+                            TeacherChecks.Select(s => s.Score[readyCheckAnswer.QuestionInfo.QuestionId.ToString()]).ToArray());
 
                     flag = flag || f >
                      readyCheckAnswer.QuestionInfo.Threshold;
@@ -362,7 +362,7 @@ namespace OnlineCheck
 
             ReadyCheckAnswers.ForEach(s =>
             {
-                s.FinalScore = TeacherChecks.Capacity == TeacherChecks.Count ? TeacherChecks.Last().Score[s.AnswerId] : OnlineHelper.GetMiddleScore(TeacherChecks.Select(a => a.Score[s.AnswerId]).ToArray());
+                s.FinalScore = TeacherChecks.Capacity == TeacherChecks.Count ? TeacherChecks.Last().Score[s.AnswerId] : OnlineHelper.GetMiddleScore(TeacherChecks.Select(a => a.Score[s.QuestionInfo.QuestionId.ToString()]).ToArray());
             });
             //FinalScore = TeacherChecks.Capacity == TeacherChecks.Count
             //    ? TeacherChecks.Last().Score

@@ -1,0 +1,511 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ADB6A4C8-D419-4C87-92DB-74B294C70115}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OnlineCheck.Web</RootNamespace>
+    <AssemblyName>OnlineCheck.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\gobal.css" />
+    <Content Include="Content\css\scoring.css" />
+    <Content Include="Content\css\teacherIndex.css" />
+    <Content Include="Content\fonts\iconfont.svg" />
+    <Content Include="Content\images\demo\text1.jpg" />
+    <Content Include="Content\images\demo\text2.jpg" />
+    <Content Include="Content\images\demo\text3.jpg" />
+    <Content Include="Content\images\index-logo.png" />
+    <Content Include="Content\images\spritesheet.png" />
+    <Content Include="Content\images\text-color.png" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\app\build.js" />
+    <Content Include="Scripts\app\dest\build.txt" />
+    <Content Include="Scripts\app\dest\examOnline.js" />
+    <Content Include="Scripts\app\dest\examOnline.js.src.js" />
+    <Content Include="Scripts\app\dest\finalJudge.js" />
+    <Content Include="Scripts\app\dest\finalJudge.js.src.js" />
+    <Content Include="Scripts\app\dest\onlineException.js" />
+    <Content Include="Scripts\app\dest\onlineException.js.src.js" />
+    <Content Include="Scripts\app\dest\submodular\cacheQuery.js" />
+    <Content Include="Scripts\app\dest\submodular\cacheQuery.js.src.js" />
+    <Content Include="Scripts\app\dest\submodular\paperViewer.js" />
+    <Content Include="Scripts\app\dest\submodular\paperViewer.js.src.js" />
+    <Content Include="Scripts\app\dest\teacherIndex.js" />
+    <Content Include="Scripts\app\dest\teacherIndex.js.src.js" />
+    <Content Include="Scripts\app\dest\util.js" />
+    <Content Include="Scripts\app\dev\callback.js" />
+    <Content Include="Scripts\app\dev\examOnline.js" />
+    <Content Include="Scripts\app\dev\finalJudge.js" />
+    <Content Include="Scripts\app\dev\onlineException.js" />
+    <Content Include="Scripts\app\dev\submodular\cacheQuery.js" />
+    <Content Include="Scripts\app\dev\submodular\paperViewer.js" />
+    <Content Include="Scripts\app\dev\teacherIndex.js" />
+    <Content Include="Scripts\app\dev\util.js" />
+    <Content Include="Scripts\chosen\chosen-sprite%402x.png" />
+    <Content Include="Scripts\chosen\chosen-sprite.png" />
+    <Content Include="Scripts\chosen\chosen.css" />
+    <Content Include="Scripts\chosen\chosen.jquery.js" />
+    <Content Include="Scripts\chosen\chosen.jquery.min.js" />
+    <Content Include="Scripts\chosen\chosen.min.css" />
+    <Content Include="Scripts\chosen\chosen.proto.js" />
+    <Content Include="Scripts\chosen\chosen.proto.min.js" />
+    <Content Include="Scripts\chosen\docsupport\chosen.png" />
+    <Content Include="Scripts\chosen\docsupport\event.simulate.js" />
+    <Content Include="Scripts\chosen\docsupport\oss-credit.png" />
+    <Content Include="Scripts\chosen\docsupport\prism.css" />
+    <Content Include="Scripts\chosen\docsupport\prism.js" />
+    <Content Include="Scripts\chosen\docsupport\style.css" />
+    <Content Include="Scripts\chosen\index.html" />
+    <Content Include="Scripts\chosen\index.proto.html" />
+    <Content Include="Scripts\chosen\options.html" />
+    <Content Include="Scripts\css.min.js" />
+    <Content Include="Scripts\customScroll\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Scripts\customScroll\jquery.mCustomScrollbar.css" />
+    <Content Include="Scripts\customScroll\jquery.mCustomScrollbar.js" />
+    <Content Include="Scripts\customScroll\jquery.mCustomScrollbar.min.css" />
+    <Content Include="Scripts\echeck\jquery-echeck.js" />
+    <Content Include="Scripts\history\jquery.history.js" />
+    <Content Include="Scripts\icheck\.gitignore" />
+    <Content Include="Scripts\icheck\icheck.js" />
+    <Content Include="Scripts\icheck\icheck.min.js" />
+    <Content Include="Scripts\icheck\skins\all.css" />
+    <Content Include="Scripts\icheck\skins\flat\aero%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\aero.css" />
+    <Content Include="Scripts\icheck\skins\flat\aero.png" />
+    <Content Include="Scripts\icheck\skins\flat\blue%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\blue.css" />
+    <Content Include="Scripts\icheck\skins\flat\blue.png" />
+    <Content Include="Scripts\icheck\skins\flat\flat%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\flat.css" />
+    <Content Include="Scripts\icheck\skins\flat\flat.png" />
+    <Content Include="Scripts\icheck\skins\flat\green%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\green.css" />
+    <Content Include="Scripts\icheck\skins\flat\green.png" />
+    <Content Include="Scripts\icheck\skins\flat\grey%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\grey.css" />
+    <Content Include="Scripts\icheck\skins\flat\grey.png" />
+    <Content Include="Scripts\icheck\skins\flat\orange%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\orange.css" />
+    <Content Include="Scripts\icheck\skins\flat\orange.png" />
+    <Content Include="Scripts\icheck\skins\flat\pink%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\pink.css" />
+    <Content Include="Scripts\icheck\skins\flat\pink.png" />
+    <Content Include="Scripts\icheck\skins\flat\purple%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\purple.css" />
+    <Content Include="Scripts\icheck\skins\flat\purple.png" />
+    <Content Include="Scripts\icheck\skins\flat\red%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\red.css" />
+    <Content Include="Scripts\icheck\skins\flat\red.png" />
+    <Content Include="Scripts\icheck\skins\flat\yellow%402x.png" />
+    <Content Include="Scripts\icheck\skins\flat\yellow.css" />
+    <Content Include="Scripts\icheck\skins\flat\yellow.png" />
+    <Content Include="Scripts\icheck\skins\flat\_all.css" />
+    <Content Include="Scripts\icheck\skins\futurico\futurico%402x.png" />
+    <Content Include="Scripts\icheck\skins\futurico\futurico.css" />
+    <Content Include="Scripts\icheck\skins\futurico\futurico.png" />
+    <Content Include="Scripts\icheck\skins\line\aero.css" />
+    <Content Include="Scripts\icheck\skins\line\blue.css" />
+    <Content Include="Scripts\icheck\skins\line\green.css" />
+    <Content Include="Scripts\icheck\skins\line\grey.css" />
+    <Content Include="Scripts\icheck\skins\line\line%402x.png" />
+    <Content Include="Scripts\icheck\skins\line\line.css" />
+    <Content Include="Scripts\icheck\skins\line\line.png" />
+    <Content Include="Scripts\icheck\skins\line\orange.css" />
+    <Content Include="Scripts\icheck\skins\line\pink.css" />
+    <Content Include="Scripts\icheck\skins\line\purple.css" />
+    <Content Include="Scripts\icheck\skins\line\red.css" />
+    <Content Include="Scripts\icheck\skins\line\yellow.css" />
+    <Content Include="Scripts\icheck\skins\line\_all.css" />
+    <Content Include="Scripts\icheck\skins\minimal\aero%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\aero.css" />
+    <Content Include="Scripts\icheck\skins\minimal\aero.png" />
+    <Content Include="Scripts\icheck\skins\minimal\blue%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\blue.css" />
+    <Content Include="Scripts\icheck\skins\minimal\blue.png" />
+    <Content Include="Scripts\icheck\skins\minimal\green%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\green.css" />
+    <Content Include="Scripts\icheck\skins\minimal\green.png" />
+    <Content Include="Scripts\icheck\skins\minimal\grey%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\grey.css" />
+    <Content Include="Scripts\icheck\skins\minimal\grey.png" />
+    <Content Include="Scripts\icheck\skins\minimal\minimal%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\minimal.css" />
+    <Content Include="Scripts\icheck\skins\minimal\minimal.png" />
+    <Content Include="Scripts\icheck\skins\minimal\orange%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\orange.css" />
+    <Content Include="Scripts\icheck\skins\minimal\orange.png" />
+    <Content Include="Scripts\icheck\skins\minimal\pink%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\pink.css" />
+    <Content Include="Scripts\icheck\skins\minimal\pink.png" />
+    <Content Include="Scripts\icheck\skins\minimal\purple%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\purple.css" />
+    <Content Include="Scripts\icheck\skins\minimal\purple.png" />
+    <Content Include="Scripts\icheck\skins\minimal\red%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\red.css" />
+    <Content Include="Scripts\icheck\skins\minimal\red.png" />
+    <Content Include="Scripts\icheck\skins\minimal\yellow%402x.png" />
+    <Content Include="Scripts\icheck\skins\minimal\yellow.css" />
+    <Content Include="Scripts\icheck\skins\minimal\yellow.png" />
+    <Content Include="Scripts\icheck\skins\minimal\_all.css" />
+    <Content Include="Scripts\icheck\skins\polaris\polaris%402x.png" />
+    <Content Include="Scripts\icheck\skins\polaris\polaris.css" />
+    <Content Include="Scripts\icheck\skins\polaris\polaris.png" />
+    <Content Include="Scripts\icheck\skins\square\aero%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\aero.css" />
+    <Content Include="Scripts\icheck\skins\square\aero.png" />
+    <Content Include="Scripts\icheck\skins\square\blue%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\blue.css" />
+    <Content Include="Scripts\icheck\skins\square\blue.png" />
+    <Content Include="Scripts\icheck\skins\square\green%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\green.css" />
+    <Content Include="Scripts\icheck\skins\square\green.png" />
+    <Content Include="Scripts\icheck\skins\square\grey%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\grey.css" />
+    <Content Include="Scripts\icheck\skins\square\grey.png" />
+    <Content Include="Scripts\icheck\skins\square\orange%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\orange.css" />
+    <Content Include="Scripts\icheck\skins\square\orange.png" />
+    <Content Include="Scripts\icheck\skins\square\pink%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\pink.css" />
+    <Content Include="Scripts\icheck\skins\square\pink.png" />
+    <Content Include="Scripts\icheck\skins\square\purple%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\purple.css" />
+    <Content Include="Scripts\icheck\skins\square\purple.png" />
+    <Content Include="Scripts\icheck\skins\square\red%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\red.css" />
+    <Content Include="Scripts\icheck\skins\square\red.png" />
+    <Content Include="Scripts\icheck\skins\square\square%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\square.css" />
+    <Content Include="Scripts\icheck\skins\square\square.png" />
+    <Content Include="Scripts\icheck\skins\square\yellow%402x.png" />
+    <Content Include="Scripts\icheck\skins\square\yellow.css" />
+    <Content Include="Scripts\icheck\skins\square\yellow.png" />
+    <Content Include="Scripts\icheck\skins\square\_all.css" />
+    <Content Include="Scripts\jBox\audio\beep1.mp3" />
+    <Content Include="Scripts\jBox\audio\beep2.mp3" />
+    <Content Include="Scripts\jBox\audio\beep3.mp3" />
+    <Content Include="Scripts\jBox\audio\bling1.mp3" />
+    <Content Include="Scripts\jBox\audio\bling2.mp3" />
+    <Content Include="Scripts\jBox\audio\bling3.mp3" />
+    <Content Include="Scripts\jBox\audio\bling4.mp3" />
+    <Content Include="Scripts\jBox\audio\bling5.mp3" />
+    <Content Include="Scripts\jBox\audio\blop.mp3" />
+    <Content Include="Scripts\jBox\audio\boop1.mp3" />
+    <Content Include="Scripts\jBox\audio\boop2.mp3" />
+    <Content Include="Scripts\jBox\audio\boop3.mp3" />
+    <Content Include="Scripts\jBox\audio\LICENCE.txt" />
+    <Content Include="Scripts\jBox\jBox.css" />
+    <Content Include="Scripts\jBox\jBox.js" />
+    <Content Include="Scripts\jBox\jBox.min.js" />
+    <Content Include="Scripts\jBox\themes\ModalBorder.css" />
+    <Content Include="Scripts\jBox\themes\NoticeBorder.css" />
+    <Content Include="Scripts\jBox\themes\TooltipBorder.css" />
+    <Content Include="Scripts\jBox\themes\TooltipDark.css" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\layer2.1\extend\layer.ext.js" />
+    <Content Include="Scripts\layer2.1\layer.js" />
+    <Content Include="Scripts\layer2.1\skin\default\icon-ext.png" />
+    <Content Include="Scripts\layer2.1\skin\default\icon.png" />
+    <Content Include="Scripts\layer2.1\skin\default\loading-0.gif" />
+    <Content Include="Scripts\layer2.1\skin\default\loading-1.gif" />
+    <Content Include="Scripts\layer2.1\skin\default\loading-2.gif" />
+    <Content Include="Scripts\layer2.1\skin\layer.css" />
+    <Content Include="Scripts\layer2.1\skin\layer.ext.css" />
+    <Content Include="Scripts\mockjs\dist\mock-min.js" />
+    <Content Include="Scripts\mockjs\dist\mock.js" />
+    <Content Include="Scripts\nicescroll\jquery.nicescroll.min.js" />
+    <Content Include="Scripts\require.js" />
+    <Content Include="Scripts\scroller\src\Animate.js" />
+    <Content Include="Scripts\scroller\src\EasyScroller.js" />
+    <Content Include="Scripts\scroller\src\Scroller.js" />
+    <Content Include="Scripts\text.js" />
+    <Content Include="Scripts\tinycolorpicker\.gitignore" />
+    <Content Include="Scripts\tinycolorpicker\docs\css\tinycolorpicker.css" />
+    <Content Include="Scripts\tinycolorpicker\docs\images\firefox.png" />
+    <Content Include="Scripts\tinycolorpicker\docs\images\text-color.png" />
+    <Content Include="Scripts\tinycolorpicker\docs\index.html" />
+    <Content Include="Scripts\tinycolorpicker\examples\nojquery\images\text-color.png" />
+    <Content Include="Scripts\tinycolorpicker\examples\nojquery\index.html" />
+    <Content Include="Scripts\tinycolorpicker\examples\nojquery\tinycolorpicker.css" />
+    <Content Include="Scripts\tinycolorpicker\examples\simple\images\text-color.png" />
+    <Content Include="Scripts\tinycolorpicker\examples\simple\index.html" />
+    <Content Include="Scripts\tinycolorpicker\examples\simple\tinycolorpicker.css" />
+    <Content Include="Scripts\tinycolorpicker\lib\jquery.tinycolorpicker.js" />
+    <Content Include="Scripts\tinycolorpicker\lib\jquery.tinycolorpicker.min.js" />
+    <Content Include="Scripts\tinycolorpicker\lib\tinycolorpicker.js" />
+    <Content Include="Scripts\tinycolorpicker\lib\tinycolorpicker.min.js" />
+    <Content Include="Scripts\tinycolorpicker\MIT-LICENSE.txt" />
+    <Content Include="Scripts\tinycolorpicker\test\conf\karma-all.js" />
+    <Content Include="Scripts\tinycolorpicker\test\conf\karma-ci.js" />
+    <Content Include="Scripts\tinycolorpicker\test\conf\karma-common.js" />
+    <Content Include="Scripts\tinycolorpicker\test\conf\karma-debug.js" />
+    <Content Include="Scripts\tinycolorpicker\test\conf\karma-dev.js" />
+    <Content Include="Scripts\tinycolorpicker\test\fixtures\text-color.png" />
+    <Content Include="Scripts\tinycolorpicker\test\fixtures\tinycolorpicker-css.html" />
+    <Content Include="Scripts\tinycolorpicker\test\fixtures\tinycolorpicker.html" />
+    <Content Include="Scripts\tinycolorpicker\test\unit\jquery.tinycolorpicker.spec.js" />
+    <Content Include="Scripts\tinycolorpicker\test\unit\tinycolorpicker.spec.js" />
+    <Content Include="Scripts\underscore-min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BusinessController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OnlineApiController.cs" />
+    <Compile Include="Filters\ErrorFilterAttribute.cs" />
+    <Compile Include="Filters\LoginFilterAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ActionHandleResult.cs" />
+    <Compile Include="Models\ReviewProgressViewModel.cs" />
+    <Compile Include="Models\ReviewViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="Content\fonts\iconfont.eot" />
+    <Content Include="Content\fonts\iconfont.ttf" />
+    <Content Include="Content\fonts\iconfont.woff" />
+    <Content Include="Content\less\components\button.less" />
+    <Content Include="Content\less\components\custom.less" />
+    <Content Include="Content\less\components\form.less" />
+    <Content Include="Content\less\components\grid.less" />
+    <Content Include="Content\less\components\iconfont.less" />
+    <Content Include="Content\less\components\index.less" />
+    <Content Include="Content\less\components\login.less" />
+    <Content Include="Content\less\components\menu.less" />
+    <Content Include="Content\less\components\normalize.less" />
+    <Content Include="Content\less\components\teacherIcon.less" />
+    <Content Include="Content\less\components\tool.less" />
+    <Content Include="Content\less\gobal.less" />
+    <Content Include="Content\less\lib.less" />
+    <Content Include="Content\less\scoring.less" />
+    <Content Include="Content\less\teacherIndex.less" />
+    <Content Include="Views\Home\Arbitration.cshtml" />
+    <Content Include="Views\Home\CallBack.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Problematics.cshtml" />
+    <Content Include="Views\Home\Review.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\app\build.bat" />
+    <Content Include="Scripts\app\dest\examOnline.js.map" />
+    <Content Include="Scripts\app\dest\finalJudge.js.map" />
+    <Content Include="Scripts\app\dest\onlineException.js.map" />
+    <Content Include="Scripts\app\dest\submodular\cacheQuery.js.map" />
+    <Content Include="Scripts\app\dest\submodular\paperViewer.js.map" />
+    <Content Include="Scripts\app\dest\teacherIndex.js.map" />
+    <Content Include="Scripts\app\dest\util.js.map" />
+    <Content Include="Scripts\chosen\bower.json" />
+    <Content Include="Scripts\icheck\bower.json" />
+    <Content Include="Scripts\icheck\CHANGELOG.md" />
+    <Content Include="Scripts\icheck\icheck.jquery.json" />
+    <Content Include="Scripts\icheck\README.md" />
+    <Content Include="Scripts\jBox\audio\beep1.ogg" />
+    <Content Include="Scripts\jBox\audio\beep2.ogg" />
+    <Content Include="Scripts\jBox\audio\beep3.ogg" />
+    <Content Include="Scripts\jBox\audio\bling1.ogg" />
+    <Content Include="Scripts\jBox\audio\bling2.ogg" />
+    <Content Include="Scripts\jBox\audio\bling3.ogg" />
+    <Content Include="Scripts\jBox\audio\bling4.ogg" />
+    <Content Include="Scripts\jBox\audio\bling5.ogg" />
+    <Content Include="Scripts\jBox\audio\blop.ogg" />
+    <Content Include="Scripts\jBox\audio\boop1.ogg" />
+    <Content Include="Scripts\jBox\audio\boop2.ogg" />
+    <Content Include="Scripts\jBox\audio\boop3.ogg" />
+    <Content Include="Scripts\mockjs\.bower.json" />
+    <Content Include="Scripts\mockjs\bower.json" />
+    <Content Include="Scripts\mockjs\dist\mock-min.js.map" />
+    <Content Include="Scripts\scroller\jasyproject.json" />
+    <Content Include="Scripts\tinycolorpicker\.jshintrc" />
+    <Content Include="Scripts\tinycolorpicker\.travis.yml" />
+    <Content Include="Scripts\tinycolorpicker\bower.json" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\layouts\main.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\attrs.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\classes.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\events.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\files.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\index.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\method.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\module.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\options.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\props.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\partials\sidebar.handlebars" />
+    <Content Include="Scripts\tinycolorpicker\docs\technical\theme\theme.json" />
+    <Content Include="Scripts\tinycolorpicker\examples\nojquery\images\Thumbs.db" />
+    <Content Include="Scripts\tinycolorpicker\examples\simple\images\Thumbs.db" />
+    <Content Include="Scripts\tinycolorpicker\Gruntfile.coffee" />
+    <Content Include="Scripts\tinycolorpicker\package.json" />
+    <Content Include="Scripts\tinycolorpicker\README.md" />
+    <Content Include="Scripts\tinycolorpicker\tinycolorpicker.jquery.json" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\Ctrl.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Scripts\mockjs\bin\" />
+    <Folder Include="Views\Auth\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\Business\" />
+    <Folder Include="Views\OnlineApi\" />
+    <Folder Include="Views\Test\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineCheck\OnlineCheck.csproj">
+      <Project>{f7f7b363-69ad-4039-bddb-e6bb1dd22754}</Project>
+      <Name>OnlineCheck</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4011</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:4011/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -75,8 +75,6 @@ namespace Wpf
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
- 
-
             var score = new Dictionary<String, Double>();
 
             score.Add(AnswerId, Score);

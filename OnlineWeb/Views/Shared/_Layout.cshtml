@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html class="@ViewBag.htmlCls" lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-TypeCodeCode" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/css/gobal.css?@System.Configuration.ConfigurationManager.AppSettings["StaticScourceVersion"]" rel="stylesheet" />
+    @RenderSection("styles", required: false)
+</head>
+
+<body class="@ViewBag.bodyCls">
+    @RenderBody()
+    <script type="text/javascript">
+    var require = {
+            urlArgs: '@System.Configuration.ConfigurationManager.AppSettings["JavascriptVersion"]',
+            baseUrl: '@System.Configuration.ConfigurationManager.AppSettings["WebPathVersion"]',
+            waitSeconds: 0,
+            paths: {
+                mock: '../../mockjs/dist/mock-min',
+                jquery: '../../jquery',
+                underscore: '../../underscore-min',
+                nicescroll: '../../nicescroll/jquery.nicescroll.min',
+                echeck: '../../echeck/jquery-echeck',
+                jBox: '../../jBox/jBox',
+                history: '../../history/jquery.history',
+                layer: '../../layer2.1/layer',
+                layerExtend: '../../layer2.1/extend/layer.ext',
+                chosen: '../../chosen/chosen.jquery.min',
+                icheck: '../../icheck/icheck.min',
+                customScroll: '../../customScroll/jquery.mCustomScrollbar.concat.min',
+                scroller: '../../scroller/src/Scroller',
+                easyScroller: '../../scroller/src/easyScroller',
+                scrollerAnimate: '../../scroller/src/Animate',
+                colorpicker: '../../tinycolorpicker/lib/jquery.tinycolorpicker'
+            },
+            //CSS依赖
+            map: {
+                '*': {
+                    'css': '../../css.min',
+                    'text': '../../text'
+                }
+            },
+            shim: {
+                nicescroll: ['jquery'],
+                elist: ['jquery', 'css!../../elist/css/default.css'],
+                echeck: ['jquery'],
+                history: ['jquery'],
+                jBox: ['jquery', 'css!../../jBox/jBox.css'],
+                layer: ['jquery'],
+                layerExtend: ['layer'],
+                laydate: {
+                    exports: 'laydate'
+                },
+                chosen: ['jquery', 'css!../../chosen/chosen.css'],
+                icheck: ['jquery', 'css!../../icheck/skins/square/blue.css'],
+                customScroll: ['jquery', 'css!../../customScroll/jquery.mCustomScrollbar.min'],
+                scroller: {
+                    deps: ['scrollerAnimate', 'easyScroller'],
+                    exports: 'Scroller'
+                },
+                easyScroller: {
+                    exports: 'EasyScroller'
+                },
+                scrollerAnimate: {
+                    exports: 'core'
+                },
+                colorpicker: ['jquery']
+            }
+        };
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

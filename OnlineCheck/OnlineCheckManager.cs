@@ -87,6 +87,8 @@ namespace OnlineCheck
                     {
                         break;
                     }
+
+                    CallBack(dpressCheck);
                 }
             }
 
@@ -114,6 +116,8 @@ namespace OnlineCheck
 
             pressCheck.Score = socre;
 
+            CallBack(pressCheck);
+
         }
         #endregion
 
@@ -128,18 +132,20 @@ namespace OnlineCheck
 
             while (queue.Any())
             {
-                PressCheck pressCheck = queue.Dequeue();
-
-                AnswerCheck answerCheck = AnswerSheets.SelectMany(s => s.AnswerChecks)
-                       .SingleOrDefault(s => s.AnswerCheckId == pressCheck.AnswerCheckId);
-
-                answerCheck.TeacherCheckManagerx.PressReturn();
-
-               
+                CallBack(queue.Dequeue());
             }
 
         }
         #endregion
+
+
+        private void CallBack(PressCheck pressCheck)
+        {
+            AnswerCheck answerCheck = AnswerSheets.SelectMany(s => s.AnswerChecks)
+       .SingleOrDefault(s => s.AnswerCheckId == pressCheck.AnswerCheckId);
+
+            answerCheck.TeacherCheckManagerx.PressReturn();
+        }
 
         #endregion
     }

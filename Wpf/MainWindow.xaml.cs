@@ -152,11 +152,11 @@ namespace Wpf
 
             QuestionGroup questionGroup = new QuestionGroup("5", JudgeModes.FourReview);
 
-            Question firstQuestion = new Question(questionGroup.QuestionGroupId, 1001, 4, 25);
+            Question firstQuestion = new Question(questionGroup.QuestionGroupId, "1001", 4, 25, 3);
 
             questionGroup.Questions.Add(firstQuestion);
 
-            Question secondQuestion = new Question(questionGroup.QuestionGroupId, 1002, 5, 15);
+            Question secondQuestion = new Question(questionGroup.QuestionGroupId, "1002", 5, 15, 4);
 
             questionGroup.Questions.Add(secondQuestion);
 

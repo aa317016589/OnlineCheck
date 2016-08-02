@@ -1,0 +1,172 @@
+﻿//out: ../css/teacherIndex.css
+@charset 'utf-8';
+@import 'lib.less';
+@import './components/teacherIcon.less';
+
+/**
+ * 首页
+ */
+
+.index-top {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    overflow: hidden;
+    .index-top-wrapper {
+        height: 100%;
+        padding: 0 15px;
+        color: #fff;
+        background-color: #029BDE;
+        .clearfix;
+        .index-logo {
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+            img {
+                display: block;
+            }
+        }
+        .index-user-info {
+            float: right;
+            line-height: 60px;
+            >a {
+                color: #fff;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+.index-left {
+    position: absolute;
+    width: 100px;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    border-right: 1px solid #bfbfbf;
+}
+
+.index-container {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+    left: 101px;
+    .index-crumbs {
+        line-height: 39px;
+        color: #333;
+        background-color: #F7F7F7;
+        border-bottom: 1px solid #d0d0d0;
+        .clearfix;
+        .curmbs-paths {
+            margin-left: 15px;
+        }
+        a {
+            color: #333;
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+    .index-content {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        border: none;
+    }
+    .index-content-iframe {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.menu-list {
+    &>li {
+        position: relative;
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+        border-top: 1px solid #81cdef;
+        .sprite {
+            margin: 0 auto;
+        }
+    }
+    .sprite-wrapper {
+        height: 38px;
+        margin-bottom: 8px;
+        line-height: 38px;
+    }
+    .menu-link {
+        display: block;
+        .size(100px, 78px);
+        padding-top: 20px;
+        color: #fff;
+        text-decoration: none;
+        background-color: #029bde;
+        &.selected, &:hover {
+            background-color: #f1871d;
+        }
+    }
+    .sub-menu {
+        position: absolute;
+        left: 100px;
+        top: 0;
+        z-index: 99;
+        display: none;
+        width: 600px;
+        .clearfix;
+        >li {
+            float: left;
+        }
+        .menu-link {
+            background-color: #f1871d;
+            &.selected, &:hover {
+                background-color: #ffecdb;
+                color: #4c4c4c;
+                .sprite-arbitration {
+                    .stitches-sprite(-21px, -5px, 6px, 33px);
+                }
+                .sprite-class-report {
+                    .stitches-sprite(-81px, -5px, 34px, 12px);
+                }
+                .sprite-online-enter {
+                    .stitches-sprite(-78px, -46px, 31px, 31px);
+                }
+                .sprite-question {
+                    .stitches-sprite(-90px, -95px, 29px, 31px);
+                }
+                .sprite-result-report {
+                    .stitches-sprite(-177px, -53px, 38px, 38px);
+                }
+                .sprite-school-report {
+                    .stitches-sprite(-52px, -136px, 33px, 25px);
+                }
+                .sprite-topic-group-setting {
+                    .stitches-sprite(-5px, -177px, 31px, 31px);
+                }
+                .sprite-look-process {
+                    .stitches-sprite(-125px, -5px, 31px, 31px);
+                }
+                .sprite-translate {
+                    .stitches-sprite(-153px, -184px, 38px, 33px);
+                }
+            }
+        }
+    }
+}

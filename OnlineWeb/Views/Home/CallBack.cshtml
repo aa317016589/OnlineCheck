@@ -1,0 +1,133 @@
+﻿@using OnlineCheck
+@{
+    ViewBag.Title = "回评";
+    ViewBag.htmlCls = "fullscreen";
+    ViewBag.bodyCls = "fullscreen";
+    QuestionGroup questionGroup = ViewData["QuestionGroup"] as QuestionGroup;
+}
+
+@section styles{
+    <link href="~/Content/css/scoring.css?@System.Configuration.ConfigurationManager.AppSettings["StaticScourceVersion"]" rel="stylesheet" />
+}
+
+<div class="content-wrapper fullscreen">
+    <!--阀值-->
+    <input id="testlets-struct" type="hidden" value="@ViewData["TestletsStruct"]"/>
+    <div class="scoring-top panel-border clearfix">
+        <div class="label-wrapper pull-left">
+            <span class="mr-10">考试任务:<span class="label label-primary"></span></span>
+            <span class="mr-10">科目:<span class="label label-primary"></span></span>
+            <span class="mr-10">题组:<span class="label label-primary"></span></span>
+            <span>阅卷教师：<span class="label label-primary"></span></span>
+        </div>
+    </div>
+    <div class="scoring panel-border pd-none bt-none">
+        <div class="right-fixed">
+            <h3 class="panel-title">回评:</h3>
+            <div class="panel-border pd-none mb-10 ba-none">
+                <form class="form-block pt-20" id="form-scoring" autocomplete="off">
+                    <input id="testlets-struct-id" type="hidden" name="TestletsStructId" value="@questionGroup.QuestionGroupId"/>
+                    @{
+                        foreach (var item in questionGroup.Questions)
+                        {
+                            <div class="form-group text-center" data-axis="">
+                                <label>@item.QuestionNo：</label>
+                                <input class="form-control mini" data-id="@item.QuestionId" data-max="@item.MaxScore" data-check="trim|custom: scoreLimit|min: 0" name="score" type="text">
+                            </div>
+                        }
+                    }
+                    <div class="form-group btn-group">
+                        <button class="cbtn btn-fn icon-none btn-blue" id="btn-submit-score" type="submit">提交</button>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-border ba-none scoring-overview" id="scoring-overview">
+                <div class="overview-desc text-left">
+                    <label>回评时间：</label>
+                    <span class="label label-primary" id="callback-date"></span>
+                </div>
+            </div>
+        </div>
+        <div class="left-flow">
+            <div class="panel-title">
+                <div class="btn-area pull-right">
+                    <div class="color-picker" id="color-picker">
+                        <a class="color">
+                            <div class="colorInner"></div>选择背景色：</a>
+                        <div class="track"></div>
+                        <ul class="dropdown"><li></li></ul>
+                        <input type="hidden" class="colorInput"/>
+                    </div>
+                </div>
+                <div class="desc">
+                    <span class="mr-5">请使用</span>
+                    <span class="shortcuts"><i class="iconfont icon-arrowupward"></i></span>
+                    <span class="shortcuts"><i class="iconfont icon-arrowdownward"></i></span>
+                    <span class="shortcuts"><i class="iconfont icon-arrowback"></i></span>
+                    <span class="shortcuts"><i class="iconfont icon-arrowforward"></i></span>
+                    <span class="ml-5 mr-5">键来移动试卷</span>
+                    <span class="mr-5">请使用</span>
+                    <span class="shortcuts"><i class="iconfont icon-add1"></i></span>
+                    <span class="shortcuts"><i class="iconfont icon-remove"></i></span>
+                    <span class="ml-5">来放大和缩小</span>
+                </div>
+                <div class="calculate" id="calculate">
+                    <span id="score-calculate"></span>
+                </div>
+            </div>
+            <div class="img-wrapper offset-top" id="img-wrapper">
+                <canvas id="scoring-item"></canvas>
+            </div>
+            <nav class="cd-stretchy-nav" id="cd-stretchy-nav">
+                <a class="cd-nav-trigger" href="javascript:void(0);" tabindex="-1">
+                    <span aria-hidden="true"></span>
+                </a>
+                <ul>
+                    <li id="btn-magnify">
+                        <a href="javascript:void(0);" tabindex="-1">
+                            <span>放大</span>
+                            <i class="iconfont icon-fangda"></i>
+                        </a>
+                    </li>
+                    <li id="btn-shrink">
+                        <a href="javascript:void(0);" tabindex="-1">
+                            <span>缩小</span>
+                            <i class="iconfont icon-suoxiao"></i>
+                        </a>
+                    </li>
+                    <li id="btn-normal">
+                        <a href="javascript:void(0);" tabindex="-1">
+                            <span>正常比例</span>
+                            <i class="iconfont icon-shouqiquanping"></i>
+                        </a>
+                    </li>
+                    <li id="btn-fullscreen">
+                        <a href="javascript:void(0);" tabindex="-1">
+                            <span>全屏</span>
+                            <i class="iconfont icon-fullscreen"></i>
+                        </a>
+                    </li>
+                    <li id="btn-restore">
+                        <a href="javascript:void(0);" tabindex="-1">
+                            <span>还原</span>
+                            <i class="iconfont icon-refresh"></i>
+                        </a>
+                    </li>
+                    <li id="btn-save">
+                        <a href="javascript:void(0);" tabindex="-1">
+                            <span>保存图片比例</span>
+                            <i class="iconfont icon-baocun"></i>
+                        </a>
+                    </li>
+                </ul>
+                <span class="strectchy-nav-bg"></span>
+            </nav>
+        </div>
+    </div>
+    <p class="use-tip">请使用Chrome、IE9+、Firefox、Safari、360浏览器（极速模式）等浏览器。分辨率建议1024*768以上。</p>
+</div>
+
+@section scripts
+{
+    <script data-main="/Scripts/app/dev/callback.js" src="~/Scripts/require.js"></script>
+}

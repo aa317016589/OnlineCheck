@@ -1,0 +1,33 @@
+﻿@using OnlineCheck
+
+@{
+    ViewBag.Title = "Ctrl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<AnswerSheet> answerSheets = ViewData["Finish"] as List<AnswerSheet>;
+}
+
+<h2>Ctrl</h2>
+<table>
+    @foreach (var answerSheet in answerSheets)
+    {
+        <tr>
+            <td>@answerSheet.StudentSubjectId </td>
+            <td>@answerSheet.Score</td>
+        </tr>
+
+        foreach (var answerCheck in answerSheet.AnswerChecks)
+        {
+            foreach (var answer in answerCheck.Answers)
+            {
+                <tr>
+                    <td>
+                        @answer.QuestionInfo.QuestionNo
+                    </td>
+                    <td>
+                        @answer.FinalScore
+                    </td>
+                </tr>
+            }
+        }
+    }
+</table>

@@ -1,0 +1,198 @@
+//main: ../gobal.less
+
+/**
+ * 表格
+ */
+
+.table-scroll{
+    overflow: hidden;
+}
+
+.table-grid {
+    width: 100%;
+    text-align: left;
+    font-size: 12px;
+    color: #666;
+    border: 1px solid #D0D0D0;
+    border-top: none;
+    //高度缩小
+    &.mini .table-tr {
+        height: 30px;
+    }
+    //不显示内部栅格边框
+    &.column-border-none{
+        border: 1px solid #d0d0d0;
+        .table-tr{
+            &>th, &>td{
+                border-right: none;
+                border-left: none;
+            }
+        }
+    }
+    //不显示上边框
+    &.bt-none .table-tr:first-child>th {
+        border-top: none;
+    }
+    //仅显示下边框
+    &.bb-only {
+        border-left: none;
+        border-right: none;
+    }
+    //强制不换行
+    &.table-nowrap{
+        .table-tr>th, .table-tr>td{
+            padding: 0 10px;
+            text-indent: 0;
+            white-space: nowrap;
+        }
+    }
+    //hover效果禁止
+    &.hover-none .table-tr:hover{
+        background-color: #fff;
+    }
+    //居中
+    &.text-center{
+        text-align: center;
+        .table-tr>th, .table-tr>td{
+            text-indent: 0;
+        }
+    }
+    .table-tr {
+        height: 38px;
+        background-color: #fff;
+        &>td, &>th {
+            padding: 0 5px;
+            text-indent: 8px;
+            &.text-center {
+                text-indent: 0;
+            }
+            &.checkbox-wrapper{
+                width: 20px;
+                text-align: center;
+                text-indent: 0;
+            }
+            &.twice-group {
+                width: 150px;
+            }
+        }
+        &>th {
+            font-size: 14px;
+            font-weight: 400;
+            background-color: #2489C5;
+            color: #fff;
+            border-left: 1px solid #ECECEC;
+            border-top: 1px solid #ECECEC;
+            &:first-child {
+                border-left: none;
+            }
+        }
+        &>td {
+            border-left: 1px solid #ECECEC;
+            border-top: 1px solid #ECECEC;
+            &:first-child {
+                border-left: none;
+            }
+        }
+        // 无数据不应用hover
+        &.td-none>td {
+            background-color: #fff;
+        }
+        &>.table-num {
+            width: 50px;
+            text-align: center;
+            text-indent: 0;
+        }
+        &:hover{
+            background-color: #F1EEEE;
+        }
+        &.selected{
+            background-color: #add8e6;
+            color: #000;
+        }
+    }
+}
+
+.page-num{
+    line-height: 38px;
+    .clearfix;
+    &.br-right {
+        a, .divide {
+            border-left: none;
+            border-right: 1px solid #d0d0d0;
+        }
+    }
+    a {
+        float: left;
+        padding: 0 14px;
+        color: #333;
+        text-decoration: none;
+        border-left: 1px solid #d0d0d0;
+    }
+    a:hover, a.active {
+        color: #fff;
+        background-color: #2489C5;
+        text-decoration: none;
+    }
+    a.disabled{
+        background-color: #EDEDED;
+        opacity: .8;
+        filter: alpha(opacity=80);
+        cursor: default;
+        color: #666;
+    }
+    .divide{
+        float: left;
+        padding: 0 14px;
+        border-left: 1px solid #d0d0d0;
+    }
+}
+
+.page-info b{
+    color: #ff0000;
+}
+
+.table-bottom-bar{
+    height: 38px;
+    padding-left: 10px;
+    line-height: 38px;
+    background-color: #f9f9f9;
+    border: 1px solid #d0d0d0;
+    border-top: none;
+    .clearfix;
+}
+
+.table-bottom-right{
+    float: left;
+}
+
+.table-bottom-left{
+    float: right;
+}
+
+.table-tip{
+    height: 100px;
+    margin-top: 20px;
+    line-height: 100px;
+    text-align: center;
+    font-size: 25px;
+    color: #666;
+}
+
+.table-loading{
+    background: url('../images/loader.gif') 50% 50% no-repeat;
+}
+
+.table-top-bar{
+    border-bottom: none;
+}
+
+.table-bottom-bar{
+    border-top: none;
+}
+
+.table-grid .sortable {
+    cursor: pointer;
+    .asc, .desc{
+        display: none;
+    }
+}
