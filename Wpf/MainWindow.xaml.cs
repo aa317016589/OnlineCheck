@@ -144,13 +144,35 @@ namespace Wpf
         #region Init
         private void Init()
         {
-            IList<Int32> teachers = new List<int>() { 1, 2, 3, 4 };
+           
+
+            IList<Teacher> teachers = new List<Teacher>()
+            {
+               new Teacher()
+               {
+                    TeacherId =  1,
+                    TeacherName = "沈笑菲"
+               },
+                new Teacher()
+               {
+                    TeacherId =  2,
+                    TeacherName = "慕雨烟"
+               },
+               new Teacher()
+               {
+                    TeacherId =  3,
+                    TeacherName = "凤舞九天"
+               },
+               new Teacher()
+               {
+                    TeacherId =  4,
+                    TeacherName = "丢丢"
+               },           
+            };
 
 
 
-
-
-            QuestionGroup questionGroup = new QuestionGroup("5", JudgeModes.FourReview);
+            QuestionGroup questionGroup = new QuestionGroup("5", JudgeModes.FourReview, teachers);
 
             Question firstQuestion = new Question(questionGroup.QuestionGroupId, "1001", 4, 25, 3);
 
@@ -162,14 +184,14 @@ namespace Wpf
 
             foreach (var teacher in teachers)
             {
-                TeacherList.Items.Add(teacher);
+                TeacherList.Items.Add(teacher.TeacherId);
             }
 
 
             QuestionGroupList.Items.Add(questionGroup.QuestionGroupId);
 
+            OnlineCheckManager.Instance.QuestionGroups.Add(questionGroup);
 
-            OnlineCheckManager.Instance.Init(questionGroup, teachers);
 
             OnlineCheckManager.Instance.AnswerSheets = CreateAnswerSheets(questionGroup, firstQuestion, secondQuestion);
 

@@ -109,6 +109,7 @@ define(['util', 'submodular/paperViewer'], function (util, paperViewer) {
             // 设置题组ID
             testletsId = item.id;
             initializeDrawing(item);
+            $("#bh").html(testletsId);
         } else {
             layer.alert('问题卷已评阅完毕，请关闭页面', {
                 closeBtn: 0,

@@ -4,6 +4,8 @@
     ViewBag.htmlCls = "fullscreen";
     ViewBag.bodyCls = "fullscreen";
     QuestionGroup questionGroup = ViewData["QuestionGroup"] as QuestionGroup;
+
+    Teacher teacher = ViewData["Teacher"] as Teacher;
 }
 
 
@@ -16,13 +18,13 @@
         <div class="label-wrapper pull-left">
             <span class="mr-10">考试任务：<span class="label label-primary"></span></span>
             <span class="mr-10">科目：<span class="label label-primary"></span></span>
-            <span class="mr-10">题组：<span class="label label-primary"></span></span>
-            <span>阅卷教师：<span class="label label-primary"></span></span>
+            <span class="mr-10">题组：<span class="label label-primary">@questionGroup.QuestionGroupName</span></span>
+            <span>阅卷教师：<span class="label label-primary">@teacher.TeacherName</span></span>
         </div>
     </div>
     <div class="scoring panel-border pd-none bt-none">
         <div class="right-fixed">
-            <h3 class="panel-title">仲裁</h3>
+            <h3 class="panel-title">仲裁 <span style=" font-size: 12px;" id="bh"></span></h3>
             <div class="panel-border pd-none mb-10 ba-none">
                 <form class="form-block pt-20" id="form-scoring" autocomplete="off">
                     <input id="testlets-struct-id" type="hidden" name="TestletsStructId" value="@questionGroup.QuestionGroupId" />
@@ -177,10 +179,10 @@
             
                 %>
             </td>
-            <td><%= item.TeacherId%></td>
+            <td><%= item.TeacherName%></td>
             <td>
                 <%
-                _.each(item.Score, function(f, index) {
+                _.each(item.ScoreCheck, function(f, index) {
                 %>
                 <%= index %>:<%= f %><br />
                 <%

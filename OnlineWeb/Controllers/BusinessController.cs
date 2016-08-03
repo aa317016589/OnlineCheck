@@ -7,7 +7,6 @@ using OnlineCheck.Web.Models;
 
 namespace OnlineCheck.Web.Controllers
 {
-    [LoginFilter]
     public class BusinessController : BaseController
     {
         #region 基础
@@ -139,6 +138,7 @@ namespace OnlineCheck.Web.Controllers
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
+                TeacherInfo = TeacherInfo,
                 Score = reviewViewModel.Score
             };
 
@@ -150,7 +150,7 @@ namespace OnlineCheck.Web.Controllers
             answerCheck.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
 
 
-            OnlineCheckManager.Instance.Enqueue(teacherCheck.TeacherId, new PressCheck()
+            OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == reviewViewModel.QuestionGroupId).PressReviewManager.Enqueue(teacherCheck.TeacherId, new PressCheck()
             {
                 Score = teacherCheck.Score,
                 AnswerCheckId = answerCheck.AnswerCheckId
@@ -252,15 +252,25 @@ namespace OnlineCheck.Web.Controllers
             //}
             //return Json(ActionHandleResult.FromFail(success: 1, message: "不存在仲裁卷"),
             //    JsonRequestBehavior.AllowGet);
+            QuestionGroup questionGroup =
+    OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == testletsStructId);
+
+            List<Question> questions = questionGroup.Questions;
 
 
-
-            IEnumerable<dynamic> answerChecks = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks).Where(s => s.QuestionGroupId == testletsStructId
-                && !s.TeacherCheckManagerx.IsAllFinish && s.TeacherCheckManagerx.IsArbitration).Select(f => new
+            IEnumerable<dynamic> answerChecks = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
+                .Where(s => s.QuestionGroupId == testletsStructId
+                            && !s.TeacherCheckManagerx.IsAllFinish && s.TeacherCheckManagerx.IsArbitration)
+                .Select(f => new
                 {
                     TestletsId = f.AnswerCheckId,
                     ImageUrl = f.CombinationedPicUrl,
-                    TeacherChecks = f.TeacherCheckManagerx.TeacherChecks
+                    TeacherChecks = f.TeacherCheckManagerx.TeacherChecks.Select(s => new
+                    {
+                        TeacherName = s.TeacherInfo.TeacherName,
+                        ScoreCheck = s.Score.ToDictionary(
+                            k => questions.SingleOrDefault(a => a.QuestionId.ToString() == k.Key).QuestionNo, v => v.Value)
+                    })
                 });
 
 
@@ -291,6 +301,7 @@ namespace OnlineCheck.Web.Controllers
             TeacherCheck teacherCheck = new TeacherCheck()
             {
                 TeacherId = TeacherId,
+                TeacherInfo = TeacherInfo,
                 CheckType = CheckTypes.Arbitration,
                 Score = reviewViewModel.Score
             };
@@ -324,11 +335,13 @@ namespace OnlineCheck.Web.Controllers
             //});
             //return Json(ActionHandleResult.FromSuccess(data: data), JsonRequestBehavior.AllowGet);
 
-            List<Question> questions =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == id).Questions;
+            QuestionGroup questionGroup =
+                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == id);
+
+            List<Question> questions = questionGroup.Questions;
 
             IEnumerable<dynamic> queuesPressChecks =
-                OnlineCheckManager.Instance.PressReview[TeacherId].Where(s => !s.IsPressed).Select(x => new
+              questionGroup.PressReviewManager.PressReview[TeacherId].Where(s => !s.IsPressed).Select(x => new
                 {
                     ReviewId = x.Id,
                     ReviewDate = x.CreateDateTime.ToString("hh:mm:ss"),
@@ -347,7 +360,9 @@ namespace OnlineCheck.Web.Controllers
         public ActionResult QueryOnlyCallBack(string testletsStructId, string reviewId)
         {
 
-            PressCheck pressCheck = OnlineCheckManager.Instance.PressReview[TeacherId].SingleOrDefault(s => s.Id == reviewId.ToString());
+            PressCheck pressCheck =
+                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == testletsStructId)
+                    .PressReviewManager.PressReview[TeacherId].SingleOrDefault(s => s.Id == reviewId.ToString());
 
             AnswerCheck answerCheck = OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
             .SingleOrDefault(s => s.AnswerCheckId == pressCheck.AnswerCheckId);
@@ -425,7 +440,10 @@ namespace OnlineCheck.Web.Controllers
 
             answerCheck.TeacherCheckManagerx.UpdateTeacherChecks(teacherCheck);
 
-            OnlineCheckManager.Instance.Press(teacherCheck.TeacherId, answerCheck.AnswerCheckId, teacherCheck.Score);
+
+            OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == reviewViewModel.QuestionGroupId).PressReviewManager.Press(teacherCheck.TeacherId, answerCheck.AnswerCheckId, teacherCheck.Score);
+
+
 
             return Json(ActionHandleResult.FromSuccess(message: "回评成功"));
 
@@ -447,7 +465,7 @@ namespace OnlineCheck.Web.Controllers
 
         public ActionResult ConfirmCallBack(string id)
         {
-            OnlineCheckManager.Instance.Clear(TeacherId);
+            OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId == id).PressReviewManager.Clear(TeacherId);
 
             return Json(ActionHandleResult.FromSuccess(), JsonRequestBehavior.AllowGet);
         }
@@ -475,6 +493,7 @@ namespace OnlineCheck.Web.Controllers
             {
                 TeacherId = TeacherId,
                 CheckType = CheckTypes.Doubt,
+                TeacherInfo = TeacherInfo,
                 Score = new Dictionary<string, double>()
             };
 
@@ -515,6 +534,7 @@ namespace OnlineCheck.Web.Controllers
             {
                 TeacherId = TeacherId,
                 CheckType = CheckTypes.SolveDoubt,
+                TeacherInfo = TeacherInfo,
                 Score = reviewViewModel.Score
             };
 
@@ -571,7 +591,7 @@ namespace OnlineCheck.Web.Controllers
 
             return Json(ActionHandleResult.FromSuccess(data: answerChecks), JsonRequestBehavior.AllowGet);
 
-        } 
+        }
         #endregion
     }
 }

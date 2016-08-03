@@ -297,6 +297,7 @@
     <Content Include="Scripts\jBox\themes\NoticeBorder.css" />
     <Content Include="Scripts\jBox\themes\TooltipBorder.css" />
     <Content Include="Scripts\jBox\themes\TooltipDark.css" />
+    <None Include="Properties\PublishProfiles\fb.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -365,8 +366,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ActionHandleResult.cs" />
+    <Compile Include="Models\CtrlViewModel.cs" />
     <Compile Include="Models\ReviewProgressViewModel.cs" />
     <Compile Include="Models\ReviewViewModel.cs" />
+    <Compile Include="Models\SelectListItemHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -392,10 +395,9 @@
     <Content Include="Content\less\teacherIndex.less" />
     <Content Include="Views\Home\Arbitration.cshtml" />
     <Content Include="Views\Home\CallBack.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Review.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Problematics.cshtml" />
-    <Content Include="Views\Home\Review.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -453,7 +455,10 @@
     <Content Include="Scripts\tinycolorpicker\README.md" />
     <Content Include="Scripts\tinycolorpicker\tinycolorpicker.jquery.json" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\Ctrl.cshtml" />
+    <Content Include="Views\Home\Finish.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\List.cshtml" />
+    <Content Include="Views\Home\Progress.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

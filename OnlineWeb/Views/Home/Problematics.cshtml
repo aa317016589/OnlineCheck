@@ -4,6 +4,7 @@
     ViewBag.htmlCls = "fullscreen";
     ViewBag.bodyCls = "fullscreen";
     QuestionGroup questionGroup = ViewData["QuestionGroup"] as QuestionGroup;
+    Teacher teacher = ViewData["Teacher"] as Teacher;
 }
 @section styles{
     <link href="~/Content/css/scoring.css?@System.Configuration.ConfigurationManager.AppSettings["StaticScourceVersion"]" rel="stylesheet" />
@@ -13,8 +14,8 @@
         <div class="label-wrapper pull-left">
             <span class="mr-10">考试任务：<span class="label label-primary"></span></span>
             <span class="mr-10">科目：<span class="label label-primary"></span></span>
-            <span class="mr-10">题组：<span class="label label-primary"></span></span>
-            <span>阅卷教师：<span class="label label-primary"></span></span>
+            <span class="mr-10">题组：<span class="label label-primary">@questionGroup.QuestionGroupName</span></span>
+            <span>阅卷教师：<span class="label label-primary">@teacher.TeacherName</span></span>
         </div>
         <div class="pull-right">
             <a class="cbtn btn-fn icon-none btn-blue" id="btn-show" href="javascript:void(0);" data-link="/Business/SourcePaper?TestletsId=" target="_blank" tabindex="-1">展示原卷</a>
@@ -22,7 +23,7 @@
     </div>
     <div class="scoring panel-border pd-none bt-none">
         <div class="right-fixed">
-            <h3 class="panel-title">阅卷</h3>
+            <h3 class="panel-title">问题卷 <span style=" font-size: 12px;" id="bh"></span></h3>
             <div class="panel-border pd-none mb-10 ba-none">
                 <form class="form-block pt-20" id="form-scoring" autocomplete="off">
                     <input id="testlets-struct-id" type="hidden" name="TestletsStructId" value="@questionGroup.QuestionGroupId" />

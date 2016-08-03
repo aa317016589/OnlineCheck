@@ -1,0 +1,112 @@
+﻿@using OnlineCheck
+
+@{
+    ViewBag.Title = "Progress";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ReviewProgress> reviewProgresses = ViewData["ReviewProgress"] as List<ReviewProgress>;
+}
+
+<table class="table-grid table-nowrap text-center">
+    <thead>
+        <tr class="table-tr">
+            <th colspan="4">基本情况</th>
+            <th colspan="4">进度预测(正评)</th>
+            <th colspan="4">一评情况</th>
+            <th colspan="4">二评情况</th>
+            <th colspan="4">三评情况</th>
+            <th colspan="6">仲裁卷</th>
+            <th colspan="6">问题卷</th>
+        </tr>
+        <tr class="table-tr">
+            <th class="table-num">序号</th>
+            <th>科目</th>
+            <th>题组名称</th>
+            <th>任务总量</th>
+
+            <th>出成绩量</th>
+            <th>出成绩率</th>
+            <th>未完成量</th>
+            <th>未完成率</th>
+
+            <th>一评完成量</th>
+            <th>一评完成率</th>
+            <th>一评未完量</th>
+            <th>一评未完率</th>
+
+            <th>二评完成量</th>
+            <th>二评完成率</th>
+            <th>二评未完量</th>
+            <th>二评未完率</th>
+
+            <th>三评完成量</th>
+            <th>三评完成率</th>
+            <th>三评未完量</th>
+            <th>三评未完率</th>
+       
+            <th>产生量</th>
+            <th>产生率</th>
+            <th>完成量</th>
+            <th>完成率</th>
+            <th>未完量</th>
+            <th>未完率</th>
+
+            <th>产生量</th>
+            <th>产生率</th>
+            <th>完成量</th>
+            <th>完成率</th>
+            <th>未完量</th>
+            <th>未完率</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            Int32 i = 1;
+
+            foreach (var review in reviewProgresses)
+            {
+                <tr class="table-tr">
+
+                    <td class="table-num">@(i++)</td>
+                    <td>题组</td>
+                    <td>@review.TestletsNumber</td>
+                    <td>@review.TotalCount</td>
+
+                    <td>@review.CompleteCount</td>
+                    <td>@review.AchievementsPercent</td>
+                    <td>@review.UnCompleteCount</td>
+                    <td>@review.UnCompletePercent</td>
+                  
+                    <td>@review.FirstCompleteCount</td>
+                    <td>@review.FirstCompletePercent</td>
+                    <td>@review.FirstUnCompleteCount</td>
+                    <td>@review.FirstUnCompletePercent</td>
+
+                    <td>@review.SecondCompleteCount</td>
+                    <td>@review.SecondCompletePercent</td>
+                    <td>@review.SecondUnCompleteCount</td>
+                    <td>@review.SecondUnCompletePercent</td>
+
+                    <td>@review.ThirdCompleteCount</td>
+                    <td>@review.ThirdCompletePercent</td>
+                    <td>@review.ThirdUnCompleteCount</td>
+                    <td>@review.ThirdUnCompletePercent</td>
+
+                    <td>@review.ArbitrationProduceCount</td>
+                    <td>@review.ArbitrationProducePercent</td>
+                    <td>@review.ArbitrationCompleteCount</td>
+                    <td>@review.ArbitrationCompletePercent</td>
+                    <td>@review.ArbitrationUnCompleteCount</td>
+                    <td>@review.ArbitrationUnCompletePercent</td>
+
+                    <td>@review.ProblematicsProduceCount</td>
+                    <td>@review.ProblematicsProducePercent</td>
+                    <td>@review.ProblematicsCompleteCount</td>
+                    <td>@review.ProblematicsCompletePercent</td>
+                    <td>@review.ProblematicsUnCompleteCount</td>
+                    <td>@review.ProblematicsUnCompletePercent</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

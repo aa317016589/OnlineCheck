@@ -1,0 +1,45 @@
+﻿@using OnlineCheck
+
+@{
+    ViewBag.Title = "最后得分";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<AnswerSheet> answerSheets = ViewData["Finish"] as List<AnswerSheet>;
+}
+<style>
+    td {
+        padding: 10px;
+    }
+</style>
+ 
+<table class="table-grid table-nowrap text-center">
+    @foreach (var answerSheet in answerSheets)
+    {
+        <tr>
+            <td> 考号 @answerSheet.StudentSubjectId </td>
+            <td> 总分 @answerSheet.Score</td>
+        </tr>
+
+        foreach (var answerCheck in answerSheet.AnswerChecks)
+        {
+            <tr>
+                <td colspan="2"> 题组号 @answerCheck.QuestionGroupId   @answerCheck.AnswerCheckId  </td>
+            </tr>
+            
+            foreach (var answer in answerCheck.Answers)
+            {
+                <tr>
+                    <td>
+                        题目号 @answer.QuestionInfo.QuestionNo
+                    </td>
+                    <td>
+                        得分 @answer.FinalScore
+                    </td>
+                </tr>
+            }
+        }
+        
+                    <tr>
+                <td colspan="2">  </td>
+            </tr>
+    }
+</table>

@@ -8,17 +8,24 @@ namespace OnlineCheck
     {
         public String QuestionGroupId { get; set; }
 
+        public String QuestionGroupName { get; set; }
+
         public JudgeModes JudgeMode { get; set; }
 
         public List<Question> Questions { get; private set; }
 
-        public QuestionGroup(String questionGroupId, JudgeModes judgeMode)
+
+        public PressReviewManager PressReviewManager { get; private set; }
+
+        public QuestionGroup(String questionGroupId, JudgeModes judgeMode, IEnumerable<Teacher> teachers)
         {
             QuestionGroupId = questionGroupId;
 
             JudgeMode = judgeMode;
 
             Questions = new List<Question>();
+
+            PressReviewManager = new PressReviewManager(teachers);
         }
 
     }
@@ -56,6 +63,8 @@ namespace OnlineCheck
     public class TeacherCheck
     {
         public Int32 TeacherId { get; set; }
+
+        public Teacher TeacherInfo { get; set; }
 
         public Dictionary<String, Double> Score { get; set; }
 
@@ -112,6 +121,8 @@ namespace OnlineCheck
         /// </summary>
         public Int32 StudentSubjectId { get; set; }
 
+        public String StudentName { get; set; }
+
         public Double Score
         {
             get { return AnswerChecks.Sum(s => s.Answers.Sum(a => a.FinalScore)); }
@@ -119,33 +130,5 @@ namespace OnlineCheck
 
         public List<AnswerCheck> AnswerChecks { get; set; }
 
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class PressCheck
-    {
-        public String Id { get; private set; }
-
-        public String AnswerCheckId { get; set; }
-
-        public Dictionary<String, Double> Score { get; set; }
-
-        /// <summary>
-        /// 表示已经被回评处理过，即手动选择回评列表进行操作的
-        /// </summary>
-        public Boolean IsPressed { get; set; }
-
-        public DateTime CreateDateTime { get; set; }
-
-        public PressCheck()
-        {
-            Id = Guid.NewGuid().ToString();
-
-            IsPressed = false;
-
-            CreateDateTime = DateTime.Now;
-        }
     }
 }

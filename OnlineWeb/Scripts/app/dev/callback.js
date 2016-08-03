@@ -41,6 +41,7 @@ define(['util', 'submodular/paperViewer'], function (util, paperViewer) {
                             id: testletsId
                         };
 
+                        $("#bh").html(testletsId);
                         // 设置时间
                         $('#callback-date').text(result.ReviewDate);
 

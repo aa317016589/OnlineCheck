@@ -133,6 +133,8 @@ namespace OnlineCheck
 
             teacherCheck.Score = readyTeacherCheck.Score;
 
+            teacherCheck.TeacherInfo = readyTeacherCheck.TeacherInfo;
+
             if (readyTeacherCheck.CheckType == CheckTypes.Doubt)
             {
                 IsDoubt = true;

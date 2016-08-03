@@ -22,54 +22,9 @@ namespace OnlineCheck.Web.Controllers
             //var data = _reviewService.QueryReviewProgress(testletsStruct.TestletsStructId);
             //return Json(ActionHandleResult.FromSuccess(data: data), JsonRequestBehavior.AllowGet);
 
-            List<TeacherCheckManager> teacherCheckManagers =
-                OnlineCheckManager.Instance.AnswerSheets.SelectMany(s => s.AnswerChecks)
-                    .Select(s => s.TeacherCheckManagerx)
-                    .ToList();
+ 
 
-
-
-            var tecaherCheckDictionary = teacherCheckManagers.GroupBy(f => new { f.EnoughCount, f.IsAllFinish })
-                .Select(
-                    s => new { EnoughCount = s.Key.EnoughCount, TotalCount = s.Sum(a => a.EnoughCount), IsAllFinish = s.Key.IsAllFinish });
-
-
-
-            String testletsStructId = id;
-            String testletsNumber = "";
-            Int32 totalCount = tecaherCheckDictionary.Sum(f => f.TotalCount);
-            Int32 completeCount = tecaherCheckDictionary.Where(s => s.IsAllFinish).Sum(f => f.EnoughCount);
-
-            Int32 firstCompleteCount =
-                tecaherCheckDictionary.Where(s => s.IsAllFinish && s.EnoughCount >= 1).Sum(s => s.TotalCount);
-
-            Int32 secondProduceCount = tecaherCheckDictionary.Where(s => s.EnoughCount >= 2).Sum(s => s.TotalCount);
-            Int32 secondCompleteCount =
-                tecaherCheckDictionary.Where(s => s.IsAllFinish && s.EnoughCount >= 2).Sum(s => s.TotalCount);
-
-            Int32 thirdProduceCount = tecaherCheckDictionary.Where(s => s.EnoughCount >= 3).Sum(s => s.TotalCount);
-            Int32 thirdCompleteCount = tecaherCheckDictionary.Where(s => s.IsAllFinish && s.EnoughCount >= 3).Sum(s => s.TotalCount);
-
-            Int32 arbitrationProduceCount = tecaherCheckDictionary.Where(s => s.EnoughCount >= 4).Sum(s => s.TotalCount);
-            Int32 arbitrationCompleteCount = tecaherCheckDictionary.Where(s => s.IsAllFinish && s.EnoughCount >= 4).Sum(s => s.TotalCount);
-
-            Int32 problematicsProduceCount = teacherCheckManagers.Count(s => s.IsDoubt);
-            Int32 problematicsCompleteCount = teacherCheckManagers.Count(s => s.IsAllFinish && s.IsDoubt);
-
-
-
-
-            ReviewProgressViewModel reviewProgress = new ReviewProgressViewModel(
-                testletsStructId, testletsNumber, totalCount, completeCount,
-                firstCompleteCount, secondProduceCount, secondCompleteCount, thirdProduceCount,
-                thirdCompleteCount, arbitrationProduceCount, arbitrationCompleteCount,
-                problematicsProduceCount, problematicsCompleteCount
-                );
-
-
-
-
-            return Json(ActionHandleResult.FromSuccess(data: reviewProgress), JsonRequestBehavior.AllowGet);
+            return Json(ActionHandleResult.FromSuccess(data: OnlineCheckManager.Instance.GetReviewProgress(id)), JsonRequestBehavior.AllowGet);
         }
 
 
@@ -113,9 +68,31 @@ namespace OnlineCheck.Web.Controllers
         {
             //根据当前题组Id，从数据库拿出该题组的相关数据填充到内存中。
 
-            IList<Int32> teachers = new List<int>() { 1, 2, 3, 4 };
+            IList<Teacher> teachers = new List<Teacher>()
+            {
+               new Teacher()
+               {
+                    TeacherId =  1,
+                    TeacherName = "沈笑菲"
+               },
+                new Teacher()
+               {
+                    TeacherId =  2,
+                    TeacherName = "慕雨烟"
+               },
+               new Teacher()
+               {
+                    TeacherId =  3,
+                    TeacherName = "凤舞九天"
+               },
+               new Teacher()
+               {
+                    TeacherId =  4,
+                    TeacherName = "丢丢"
+               },           
+            };
 
-            QuestionGroup questionGroup = new QuestionGroup(questionGroupId, JudgeModes.FourReview);
+            QuestionGroup questionGroup = new QuestionGroup(questionGroupId, JudgeModes.FourReview, teachers);
 
             Question firstQuestion = new Question(questionGroup.QuestionGroupId, "1", 4, 25, 1001);
 
@@ -125,7 +102,10 @@ namespace OnlineCheck.Web.Controllers
 
             questionGroup.Questions.Add(secondQuestion);
 
-            OnlineCheckManager.Instance.Init(questionGroup, teachers);
+
+            OnlineCheckManager.Instance.QuestionGroups.Add(questionGroup);
+
+            OnlineCheckManager.Instance.Teachers.AddRange(teachers);
 
             OnlineCheckManager.Instance.AnswerSheets = CreateAnswerSheets(questionGroup, firstQuestion, secondQuestion);
 

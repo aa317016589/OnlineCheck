@@ -236,7 +236,7 @@ define(['util', 'submodular/paperViewer', 'submodular/cacheQuery'], function (ut
                     id: data.Data.TestletsId,
                     image: getImage(data.Data.ImageUrl)
                 });
-
+                $("#bh").html(testletsId);
             } else {
                 util.showAlert(data.Message || '获取缓存列表失败');
                 //initializeFail();

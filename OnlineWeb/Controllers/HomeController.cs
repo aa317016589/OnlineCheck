@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using OnlineCheck.Web.Filters;
+using OnlineCheck.Web.Models;
 
 namespace OnlineCheck.Web.Controllers
 {
@@ -13,7 +15,7 @@ namespace OnlineCheck.Web.Controllers
         /// </summary>
         [HttpGet]
 
-        public ActionResult Index(string questionGroupId, Int32 teacherId)
+        public ActionResult Review(string questionGroupId, Int32 teacherId)
         {
             QuestionGroup questionGroup =
                 OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
@@ -29,9 +31,9 @@ namespace OnlineCheck.Web.Controllers
             ViewData["QuestionGroup"] = questionGroup;
 
             //查询教师信息
-            ViewData["Teacher"] = teacherId;
+            ViewData["Teacher"] = TeacherInfo;
 
-            Response.Cookies.Add(new HttpCookie("TeacherId", teacherId.ToString()));
+
 
             return View();
         }
@@ -40,8 +42,11 @@ namespace OnlineCheck.Web.Controllers
         /// </summary>
         [HttpGet]
 
-        public ActionResult Problematics(string id)
+        public ActionResult Problematics(string questionGroupId, Int32 teacherId)
         {
+
+          
+
             ////查询题组信息
             //var testletsStructInfo =
             //    _testletsStructQueryService.FindTestletsStructInfo(new TestletsStructQueryDto(examTestletsId: id));
@@ -63,11 +68,12 @@ namespace OnlineCheck.Web.Controllers
             //ViewData["Teacher"] = base.Teacher;
 
             QuestionGroup questionGroup =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == id);
+                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == questionGroupId);
 
-            ViewData["Teacher"] = TeacherId;
+            ViewData["Teacher"] = TeacherInfo;
 
             ViewData["QuestionGroup"] = questionGroup;
+
 
 
             return View();
@@ -77,8 +83,10 @@ namespace OnlineCheck.Web.Controllers
         /// </summary>
         [HttpGet]
 
-        public ActionResult Arbitration(string id)
+        public ActionResult Arbitration(string questionGroupId, Int32 teacherId)
         {
+           
+
             ////查询题组信息
             //var testletsStructInfo =
             //    _testletsStructQueryService.FindTestletsStructInfo(new TestletsStructQueryDto(examTestletsId: id));
@@ -97,10 +105,13 @@ namespace OnlineCheck.Web.Controllers
 
 
             QuestionGroup questionGroup =
-                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == id);
+                OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(s => s.QuestionGroupId.ToString() == questionGroupId);
 
-            ViewData["Teacher"] = TeacherId;
+            ViewData["Teacher"] = TeacherInfo;
+
             ViewData["QuestionGroup"] = questionGroup;
+
+
 
             return View();
         }
@@ -111,15 +122,14 @@ namespace OnlineCheck.Web.Controllers
         [LoginFilter]
         public ActionResult CallBack(string testletsStructId, string reviewId)
         {
-
             String questionGroupId = testletsStructId;
-  
+
             QuestionGroup questionGroup =
                 OnlineCheckManager.Instance.QuestionGroups.SingleOrDefault(
                     s => s.QuestionGroupId.ToString() == questionGroupId);
 
 
-            ViewData["Teacher"] = TeacherId;
+            ViewData["Teacher"] = TeacherInfo;
             ViewData["QuestionGroup"] = questionGroup;
 
 
@@ -144,29 +154,137 @@ namespace OnlineCheck.Web.Controllers
             return View();
         }
 
-       /// <summary>
-       /// 控制界面，
-       /// </summary>
-       /// <returns></returns>
-        public ActionResult Ctrl()
+        /// <summary>
+        /// 控制界面，
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Finish()
         {
             OnlineCheckManager.Instance.AnswerSheets.ForEach(s =>
             {
                 s.AnswerChecks.ForEach(a =>
                 {
-                  a.Set();
+                    a.Set();
                 });
             });
 
-           ViewData["Finish"] = OnlineCheckManager.Instance.AnswerSheets;
+            ViewData["Finish"] = OnlineCheckManager.Instance.AnswerSheets;
 
 
 
             return View();
         }
 
+        public ActionResult Progress()
+        {
+            ViewData["ReviewProgress"] = OnlineCheckManager.Instance.GetReviewProgress();
+
+            return View();
+        }
 
 
+        public ActionResult Index()
+        {
+            if (OnlineCheckManager.Instance.IsTesting)
+            {
+                return RedirectToAction("List");
+            }
+
+       
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(CtrlViewModel ctrl)
+        {
+            List<Teacher> teachers = new List<Teacher>();
+
+            for (int i = 0; i < ctrl.TeacherCounts; i++)
+            {
+                teachers.Add(new Teacher()
+                {
+                    TeacherId = i + 1,
+                    TeacherName = "第" + (i + 1).ToString() + "位教师"
+                });
+            }
+
+            OnlineCheckManager.Instance.Teachers.AddRange(teachers);
+
+            int x = 1;
+
+            for (int i = 0; i < ctrl.QuestionGroupCounts; i++)
+            {
+                QuestionGroup questionGroup = new QuestionGroup((i + 1).ToString(), ctrl.JudgeMode, teachers);
+
+                questionGroup.QuestionGroupName = "第" + (i + 1).ToString() + "题组";
+
+
+                for (int j = 0; j < ctrl.QuestionCounts; j++)
+                {
+                    Question firstQuestion = new Question(questionGroup.QuestionGroupId,
+                        ((i * ctrl.QuestionCounts) + j + 1).ToString(),
+                        ctrl.Threshold, 25, new Random((int)DateTime.Now.Ticks * j).Next());
+
+                    questionGroup.Questions.Add(firstQuestion);
+
+                }
+
+                OnlineCheckManager.Instance.QuestionGroups.Add(questionGroup);
+            }
+
+
+            for (int i = 0; i < ctrl.StudentCounts; i++)
+            {
+
+                AnswerSheet answerSheet = new AnswerSheet()
+                {
+                    MaxPicUrl = Guid.NewGuid().ToString(),
+                    StudentName = "学生" + (i + 1).ToString(),
+                    StudentSubjectId = new Random().Next(99999) / (i + 1)
+                };
+
+                List<AnswerCheck> answerChecks = new List<AnswerCheck>();
+
+                for (int j = 0; j < ctrl.QuestionGroupCounts; j++)
+                {
+                    QuestionGroup qg = OnlineCheckManager.Instance.QuestionGroups[j];
+
+
+                    answerChecks.Add(new AnswerCheck(qg.QuestionGroupId, qg.Questions.Select(s => new Answer(s, Guid.NewGuid().ToString())).ToList(), qg.JudgeMode));
+                }
+                answerSheet.AnswerChecks = answerChecks;
+
+                OnlineCheckManager.Instance.AnswerSheets.Add(answerSheet);
+            }
+
+            OnlineCheckManager.Instance.IsTesting = true;
+
+            return RedirectToAction("list");
+        }
+
+        public ActionResult EndTest()
+        {
+            OnlineCheckManager.Instance.IsTesting = false;
+
+            OnlineCheckManager.Instance.QuestionGroups = new List<QuestionGroup>();
+            OnlineCheckManager.Instance.Teachers = new List<Teacher>();
+            OnlineCheckManager.Instance.AnswerSheets = new List<AnswerSheet>();
+
+            return RedirectToAction("index");
+        }
+
+        public ActionResult List()
+        {
+            ViewData["QuestionGroups"] = OnlineCheckManager.Instance.QuestionGroups;
+
+            ViewData["Teachers"] = OnlineCheckManager.Instance.Teachers;
+
+
+
+
+
+            return View();
+        }
 
         ///// <summary>临时登录页面
         ///// </summary>

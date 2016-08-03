@@ -1,0 +1,71 @@
+﻿@using OnlineCheck
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<QuestionGroup> questionGroups = ViewData["QuestionGroups"] as List<QuestionGroup>;
+    List<Teacher> teachers = ViewData["Teachers"] as List<Teacher>;
+
+}
+
+@section styles{
+    <link href="~/Content/css/scoring.css?@System.Configuration.ConfigurationManager.AppSettings["StaticScourceVersion"]" rel="stylesheet"/>
+    <style>
+        ul li {
+            margin: 10px;
+            font-size: 18px;
+        }
+    </style>
+}
+<div>
+    <select id="teacher">
+        @foreach (var teacher in teachers)
+        {
+            <option value="@teacher.TeacherId">@teacher.TeacherName</option>
+        }
+    </select>
+
+    <select id="questionGroup">
+        @foreach (var questionGroup in questionGroups)
+        {
+            <option value="@questionGroup.QuestionGroupId">@questionGroup.QuestionGroupName</option>
+        }
+
+    </select>
+
+    <ul>
+        <li>
+            <a target=_blank data-href="/Home/Review?">阅卷地址</a>
+        </li>
+        <li>
+            <a target=_blank data-href="/Home/Problematics?">问题卷地址</a>
+        </li>
+        <li>
+            <a target=_blank data-href="/Home/Arbitration?">仲裁卷地址</a>
+        </li>
+        <li>
+            <a target=_blank data-href="/Home/Progress?">当前进度</a>
+        </li>
+        <li>
+            <a target=_blank href="/Home/Finish?">计算最后得分</a>
+        </li>
+        <li>
+            <a href="/Home/EndTest?">结束当前阅卷，重新设置参数</a>
+        </li>
+    </ul>
+
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.js"></script>
+    <script>
+        $(function() {
+            $("ul li a:lt(4)").on("click", function (event) {
+                var questionGroup = $("#questionGroup").val();
+                var teacher = $("#teacher").val();
+
+                $(this).attr("href", $(this).data('href') + $.param({ questionGroupId: questionGroup, teacherId: teacher }));
+
+            });
+        })
+    </script>
+}

@@ -116,6 +116,7 @@ define(['util', 'submodular/paperViewer', 'submodular/cacheQuery'], function (ut
             testletsId = item.id;
             initializeDrawing(item);
             showChecks(item.OtherData);
+            $("#bh").html(testletsId);
         } else {
             layer.alert('仲裁已评阅完毕，请关闭页面', {
                 closeBtn: 0,
